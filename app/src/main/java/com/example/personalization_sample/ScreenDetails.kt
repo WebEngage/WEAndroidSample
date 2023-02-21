@@ -1,0 +1,209 @@
+package com.example.personalization_sample
+
+import android.os.Bundle
+import android.util.Log
+import android.view.Gravity
+import android.view.LayoutInflater
+import android.view.View
+import android.widget.*
+import androidx.appcompat.app.AlertDialog
+import androidx.appcompat.app.AppCompatActivity
+import com.example.personalization_sample.model.DataModel
+import java.util.logging.Logger
+
+class ScreenDetails : AppCompatActivity() {
+    val dataModel = DataModel.getInstance()
+    var isCheked: Boolean = false
+
+
+    private lateinit var sizeEdit: EditText
+    private lateinit var screenEdit: EditText
+    private lateinit var eventEdit: EditText
+    private lateinit var addDataButton: Button
+    private lateinit var saveButton: Button
+
+    private lateinit var position: EditText
+    private lateinit var height: EditText
+    private lateinit var width: EditText
+    private lateinit var propertyId: EditText
+    private lateinit var addViewBtn: Button
+    private lateinit var checkBox: CheckBox
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setContentView(R.layout.activity_screen_details)
+        sizeEdit = findViewById(R.id.sizeEdit)
+        screenEdit = findViewById(R.id.screenEdit)
+        eventEdit = findViewById(R.id.eventEdit)
+        addDataButton = findViewById(R.id.addData)
+        saveButton = findViewById(R.id.saveData)
+        checkBox = findViewById(R.id.checkBox)
+
+
+        addDataButton.setOnClickListener {
+            // Add data to list
+            addViewData()
+        }
+
+        checkBox.setOnCheckedChangeListener { _, isChecked ->
+            isCheked = isChecked
+        }
+
+        saveButton.setOnClickListener {
+            val size = sizeEdit.text.toString().toIntOrNull()
+            val screenName = screenEdit.text.toString()
+            val eventName = eventEdit.text.toString()
+            val list = dataModel.getData()
+            var isAlreadyExist  = false
+            for(i in list) {
+                Log.d("AKQ", "Data - "+i)
+                if(screenName == i.screenName) {
+                    isAlreadyExist = true
+                }
+            }
+            if(!isAlreadyExist && !screenName.isNullOrEmpty()) {
+            dataModel.setData(size, screenName, eventName, isCheked)
+                finish();
+//            val latestList = dataModel.getData()
+//            Utils.storeModelData(latestList)
+//            Utils.getModelData()
+
+//            createList()
+//                TODO() - store this into sharedPref and fetch it on app open
+            } else {
+
+                Toast.makeText(applicationContext, "Screen already Exists", Toast.LENGTH_LONG).show()
+            }
+        }
+    }
+
+    fun addViewData() {
+        val dialogView = LayoutInflater.from(this).inflate(R.layout.modal_layout, null)
+        val builder = AlertDialog.Builder(this).create()
+        showDailog(dialogView, builder)
+        addViewBtn = dialogView.findViewById(R.id.addWeViewBtn)
+        position = dialogView.findViewById(R.id.position)
+        height = dialogView.findViewById(R.id.height)
+        width = dialogView.findViewById(R.id.width)
+        propertyId = dialogView.findViewById(R.id.propertyId)
+
+
+
+        Toast.makeText(this, "Listener attached for addViewBtn", Toast.LENGTH_SHORT).show()
+
+        addViewBtn.setOnClickListener {
+            Toast.makeText(this, "View Added", Toast.LENGTH_SHORT).show()
+            if(!propertyId.text.toString().isNullOrEmpty()) {
+                registerView()
+                createList()
+            }
+            builder.dismiss()
+
+
+        }
+    }
+
+    fun registerView() {
+//        position.
+        val positionView: Int? = position.text.toString().toIntOrNull()
+        val heightView: String = height.text.toString()
+        val widthView: String = width.text.toString()
+        val propertyIdView: String = propertyId.text.toString()
+        Toast.makeText(this, "Register View - "+positionView, Toast.LENGTH_SHORT).show()
+        dataModel.setViewData(positionView, heightView, widthView, propertyIdView)
+//        val list = dataModel.getViewData()
+//        var isAlreadyExist  = false
+//        for(i in list) {
+//            Log.d("AKQ", "list - "+i)
+//        }
+    }
+
+    fun showDailog (dialogView: View, builder: AlertDialog) {
+
+        // Set the view for the dialog builder
+        builder.setView(dialogView)
+
+        // Add any desired dialog options
+        builder.setTitle("Add View Data")
+
+        // Call show() on the dialog builder to display the modal dialog
+        builder.show()
+    }
+    override fun onResume() {
+        super.onResume()
+        val inflater = LayoutInflater.from(applicationContext)
+        val layout = inflater.inflate(R.layout.activity_screen_details, null)
+        val container = findViewById<LinearLayout>(R.id.screenList)
+        createList()
+    }
+
+    fun createList() {
+        val container = findViewById<LinearLayout>(R.id.screenList)
+        container.removeAllViews()
+
+        val list = dataModel.getViewData()
+        val itemListLayout = LinearLayout(this)
+        itemListLayout.orientation = LinearLayout.HORIZONTAL
+        itemListLayout.setBackgroundResource(androidx.cardview.R.color.cardview_shadow_end_color)
+        itemListLayout.layoutParams = LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT)
+
+        for (i in list) {
+            val itemLayout = LinearLayout(this)
+            itemLayout.orientation = LinearLayout.VERTICAL
+            itemLayout.layoutParams = LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT)
+//            itemLayout.setBackgroundResource(R.color.teal_200) // set the background to a border drawable
+
+            // Add the screen name TextView
+            val screenNameTextView = TextView(this)
+            screenNameTextView.text = "PropertyId ${i.propertyId}"
+            screenNameTextView.layoutParams = LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT)
+            itemLayout.addView(screenNameTextView)
+
+            // Add the value TextView
+            val valueTextView = TextView(this)
+            valueTextView.text = "position ${i.position}"
+            valueTextView.layoutParams = LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT)
+            itemLayout.addView(valueTextView)
+
+            // Add the value TextView
+            val eventTextView = TextView(this)
+            eventTextView.text = "Hieght= ${i.height} | Width= ${i.width}"
+            eventTextView.layoutParams = LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT)
+            itemLayout.addView(eventTextView)
+
+
+//            editButton.layoutParams = LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT)
+
+            val itemButtonLayout = LinearLayout(this)
+            itemButtonLayout.layoutParams = LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT)
+
+
+
+
+            // Add the edit button
+            val editButton = Button(this)
+            editButton.text = "Edit"
+            val layoutParam = LinearLayout.LayoutParams(
+                LinearLayout.LayoutParams.WRAP_CONTENT,
+                LinearLayout.LayoutParams.WRAP_CONTENT
+            )
+            layoutParam.gravity = Gravity.END // TODO - Move button to Right
+            editButton.layoutParams = layoutParam
+            itemButtonLayout.addView(editButton)
+
+
+            // Add the list item to the parent LinearLayout
+            itemListLayout.addView(itemLayout)
+            itemListLayout.addView(itemButtonLayout)
+        }
+
+// Add the horizontal LinearLayout to the parent layout inside a ScrollView
+        val scrollView = ScrollView(this)
+        scrollView.layoutParams = LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT)
+        scrollView.addView(itemListLayout)
+//        container.addView(scrollView)
+        container.addView(scrollView)
+    }
+
+
+
+}

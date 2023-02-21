@@ -1,6 +1,7 @@
 package com.example.personalization_sample
 
 import android.content.Context
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
@@ -10,6 +11,7 @@ import android.widget.RelativeLayout
 import android.widget.TextView
 import android.widget.Toast
 import androidx.core.content.edit
+import com.example.personalization_sample.model.DataModel
 import com.webengage.sdk.android.WebEngage
 
 class MainActivity : AppCompatActivity() {
@@ -17,6 +19,7 @@ class MainActivity : AppCompatActivity() {
     private lateinit var editText: EditText
     private lateinit var saveButton: Button
     private lateinit var logoutButton: Button
+    private lateinit var customscreenButton: Button
     val weUser = WebEngage.get().user()
     val prefs: SharedPrefsManager = SharedPrefsManager.get()
 
@@ -36,21 +39,23 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
+        val arr = Utils.getModelData()
+        DataModel.getInstance().updateData(arr)
+
 
         activityMain = findViewById(R.id.activity_main)
         editText = findViewById(R.id.editText)
         saveButton = findViewById(R.id.button)
         logoutButton = findViewById(R.id.logoutButton)
-//        prefs = getSharedPreferences("myPrefs", Context.MODE_PRIVATE)
+        customscreenButton = findViewById(R.id.customScreenButton);
+        val strData = prefs.getString("registry", "")
+        Log.d("AKS", "Str data - "+strData)
+//        Log.d("AKS", "Str data - "+strData[0])
 
 
-        // Get the CUID value from SharedPreferences
         val cuid = prefs.getString("cuid", "")
-
-        // Check if CUID is available in SharedPreferences
         if (cuid.isNullOrEmpty()) {
             showLogin();
-
             saveButton.setOnClickListener {
                 val text = editText.text.toString()
                 prefs.put("cuid", text)
@@ -59,6 +64,10 @@ class MainActivity : AppCompatActivity() {
             }
         } else {
             showLogoutButton()
+        }
+        customscreenButton.setOnClickListener {
+            val intent = Intent(this, CustomScreen::class.java)
+            startActivity(intent)
         }
 
         // Handle the Logout button click
