@@ -1,6 +1,5 @@
 package com.example.personalization_sample
 
-import android.util.Log
 import com.example.personalization_sample.model.Model
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
@@ -10,6 +9,10 @@ class Utils {
     companion object {
         val prefs: SharedPrefsManager = SharedPrefsManager.get()
 
+        fun covertDpToPixel(dpValue: Float, scale: Int): Int {
+            return (dpValue * scale + 0.5f).toInt()
+
+        }
         fun storeModelData(latestList: ArrayList<Model>) {
             val gson = Gson()
             val jsonString = gson.toJson(latestList)

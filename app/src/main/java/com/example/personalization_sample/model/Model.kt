@@ -8,6 +8,8 @@ data class Model (
     val eventName: String = "",
     val isRecyclerView: Boolean = false,
     val viewRegistry: ArrayList<ViewModel>
+//    val viewRegistry: HashMap<String, ArrayList<ViewModel>>
+//    kotlin.collections.hashMapOf<String, ArrayList<ViewModel>>()
 ) {
 }
 

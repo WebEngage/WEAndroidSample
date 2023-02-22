@@ -4,6 +4,7 @@ import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
+import android.util.TypedValue
 import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
@@ -14,6 +15,8 @@ import android.widget.ListView
 import android.widget.ScrollView
 import android.widget.TextView
 import android.widget.Toast
+import androidx.core.view.marginTop
+import androidx.core.view.setMargins
 import androidx.recyclerview.widget.RecyclerView
 import com.example.personalization_sample.model.DataModel
 import com.example.personalization_sample.model.Model
@@ -66,33 +69,70 @@ class CustomScreen : AppCompatActivity() {
         val list = dataModel.getData()
         Log.d("AKSHAY", "list inside custom screen "+list)
 
+//        val itemTopLevelLayout = LinearLayout(this)
+//        itemTopLevelLayout.orientation = LinearLayout.HORIZONTAL
+//        itemTopLevelLayout.setBackgroundResource(R.color.teal_700)
+//
+////        itemMarginLayoutLayoutParams.setMargins(0,50,0,50)
+//        itemTopLevelLayout.layoutParams = LinearLayout.LayoutParams(
+//            LinearLayout.LayoutParams.MATCH_PARENT,
+//            LinearLayout.LayoutParams.WRAP_CONTENT
+//        )
+//
+
         val itemListLayout = LinearLayout(this)
         itemListLayout.orientation = LinearLayout.VERTICAL
-        itemListLayout.setBackgroundResource(R.color.teal_700)
-        itemListLayout.layoutParams = LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT)
+//        layoutParams.setMargins(16, 16, 16, 16)
+        val layoutParams = LinearLayout.LayoutParams(
+            LinearLayout.LayoutParams.MATCH_PARENT,
+            LinearLayout.LayoutParams.WRAP_CONTENT,
+            1f
+        )
+        itemListLayout.setBackgroundResource(R.color.teal_200) // set the background to a border drawable
+
+        layoutParams.setMargins(0,50,0,50)
+        itemListLayout.layoutParams = layoutParams
+
+
+//        2 Margin Layout
+
 
         for (entry in list) {
             val itemLayout = LinearLayout(this)
 
             itemLayout.orientation = LinearLayout.VERTICAL
-            itemLayout.layoutParams = LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT)
+            val itemLayoutParams = LinearLayout.LayoutParams(
+                LinearLayout.LayoutParams.WRAP_CONTENT,
+                LinearLayout.LayoutParams.WRAP_CONTENT
+            )
+//            itemLayout.setBackgroundResource(R.color.teal_700)
+
+            itemLayoutParams.setMargins(0,100,0,50)
+            itemLayout.layoutParams = itemLayoutParams
 //            itemLayout.setBackgroundResource(R.color.teal_200) // set the background to a border drawable
 
             // Add the screen name TextView
             val screenNameTextView = TextView(this)
-            screenNameTextView.text = "List size ${entry.listSize}"
+
+            screenNameTextView.text = "Screen Name ${entry.screenName}"
+            screenNameTextView.setTextSize(TypedValue.COMPLEX_UNIT_SP, 22f)
+
             screenNameTextView.layoutParams = LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT)
             itemLayout.addView(screenNameTextView)
 
             // Add the value TextView
             val valueTextView = TextView(this)
-            valueTextView.text = "Screen Name ${entry.screenName}"
+            valueTextView.text = "List size ${entry.listSize}"
+            screenNameTextView.setTextSize(TypedValue.COMPLEX_UNIT_SP, 22f)
+
             valueTextView.layoutParams = LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT)
             itemLayout.addView(valueTextView)
 
             // Add the value TextView
             val eventTextView = TextView(this)
             eventTextView.text = "Event Name ${entry.eventName}"
+            screenNameTextView.setTextSize(TypedValue.COMPLEX_UNIT_SP, 22f)
+
             eventTextView.layoutParams = LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT)
             itemLayout.addView(eventTextView)
 
@@ -100,6 +140,15 @@ class CustomScreen : AppCompatActivity() {
 
             val itemButtonLayout = LinearLayout(this)
             itemButtonLayout.orientation = LinearLayout.VERTICAL
+            val itemButtonLayoutParams = LinearLayout.LayoutParams(
+                LinearLayout.LayoutParams.WRAP_CONTENT,
+                LinearLayout.LayoutParams.WRAP_CONTENT,
+                1f
+            )
+//            itemButtonLayout.setBackgroundResource(R.color.teal_700)
+            itemButtonLayout.layoutParams = itemButtonLayoutParams
+
+            itemButtonLayoutParams.setMargins(0,50,0,50)
             // Add the edit button
             val openButton = Button(this)
             openButton.text = "Open"
@@ -133,10 +182,13 @@ class CustomScreen : AppCompatActivity() {
             itemListLayout.addView(itemLayout)
             itemListLayout.addView(itemButtonLayout)
         }
+//        itemTopLevelLayout.addView(itemListLayout)
+
 
 // Add the horizontal LinearLayout to the parent layout inside a ScrollView
         val scrollView = ScrollView(this)
         scrollView.layoutParams = LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT)
+//        scrollView.addView(itemTopLevelLayout)
         scrollView.addView(itemListLayout)
 //        container.addView(scrollView)
         container.addView(scrollView)

@@ -60,7 +60,7 @@ class ScreenDetails : AppCompatActivity() {
                     isAlreadyExist = true
                 }
             }
-            if(!isAlreadyExist && !screenName.isNullOrEmpty()) {
+            if(!isAlreadyExist && !screenName.isNullOrEmpty() && size != null) {
             dataModel.setData(size, screenName, eventName, isCheked)
                 finish();
 //            val latestList = dataModel.getData()
@@ -71,7 +71,7 @@ class ScreenDetails : AppCompatActivity() {
 //                TODO() - store this into sharedPref and fetch it on app open
             } else {
 
-                Toast.makeText(applicationContext, "Screen already Exists", Toast.LENGTH_LONG).show()
+                Toast.makeText(applicationContext, "Enter Valid Data", Toast.LENGTH_LONG).show()
             }
         }
     }
@@ -105,8 +105,8 @@ class ScreenDetails : AppCompatActivity() {
     fun registerView() {
 //        position.
         val positionView: Int? = position.text.toString().toIntOrNull()
-        val heightView: String = height.text.toString()
-        val widthView: String = width.text.toString()
+        val heightView: Int? = height.text.toString().toIntOrNull()
+        val widthView: Int? = width.text.toString().toIntOrNull()
         val propertyIdView: String = propertyId.text.toString()
         Toast.makeText(this, "Register View - "+positionView, Toast.LENGTH_SHORT).show()
         dataModel.setViewData(positionView, heightView, widthView, propertyIdView)
@@ -140,11 +140,12 @@ class ScreenDetails : AppCompatActivity() {
         val container = findViewById<LinearLayout>(R.id.screenList)
         container.removeAllViews()
 
+
         val list = dataModel.getViewData()
         val itemListLayout = LinearLayout(this)
-        itemListLayout.orientation = LinearLayout.HORIZONTAL
+        itemListLayout.orientation = LinearLayout.VERTICAL
         itemListLayout.setBackgroundResource(androidx.cardview.R.color.cardview_shadow_end_color)
-        itemListLayout.layoutParams = LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT)
+        itemListLayout.layoutParams = LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT)
 
         for (i in list) {
             val itemLayout = LinearLayout(this)
@@ -171,8 +172,6 @@ class ScreenDetails : AppCompatActivity() {
             itemLayout.addView(eventTextView)
 
 
-//            editButton.layoutParams = LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT)
-
             val itemButtonLayout = LinearLayout(this)
             itemButtonLayout.layoutParams = LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT)
 
@@ -180,15 +179,18 @@ class ScreenDetails : AppCompatActivity() {
 
 
             // Add the edit button
-            val editButton = Button(this)
-            editButton.text = "Edit"
+            val deleteButton = Button(this)
+            deleteButton.text = "Delete"
             val layoutParam = LinearLayout.LayoutParams(
                 LinearLayout.LayoutParams.WRAP_CONTENT,
                 LinearLayout.LayoutParams.WRAP_CONTENT
             )
-            layoutParam.gravity = Gravity.END // TODO - Move button to Right
-            editButton.layoutParams = layoutParam
-            itemButtonLayout.addView(editButton)
+//            layoutParam.gravity = Gravity.END // TODO - Move button to Right
+            deleteButton.layoutParams = layoutParam
+            deleteButton.setOnClickListener {
+                deleteViewEntry(i.propertyId)
+            }
+            itemButtonLayout.addView(deleteButton)
 
 
             // Add the list item to the parent LinearLayout
@@ -202,6 +204,11 @@ class ScreenDetails : AppCompatActivity() {
         scrollView.addView(itemListLayout)
 //        container.addView(scrollView)
         container.addView(scrollView)
+    }
+    fun deleteViewEntry(propertyId: String) {
+        dataModel.removeViewEntry(propertyId)
+        createList()
+
     }
 
 

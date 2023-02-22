@@ -15,13 +15,13 @@ class DataModel {
     private var isRecyclerView: Boolean = false
 
     private var viewPosition: Int? = 0
-    private var viewHeight: String = ""
-    private var viewWidth: String = ""
+    private var viewHeight: Int? = 0
+    private var viewWidth: Int? = 0
     private var viewPropertyId: String = ""
 //    model: Model
 //    private var registryMap: HashMap<String, Model> = hashMapOf()
     val registryMap = ArrayList<Model>()
-    val viewRegistry = ArrayList<ViewModel>()
+    var viewRegistry = ArrayList<ViewModel>()
 
     companion object {
         @Volatile
@@ -61,11 +61,14 @@ class DataModel {
         eventName = event
         isRecyclerView = isChecked
 //        viewRegistry = viewRegistry
+        val newViewRegistry = ArrayList<ViewModel>()
+
         val model = Model(listSize, screenName, eventName, isRecyclerView, viewRegistry)
         registryMap.add(model)
 
         Utils.storeModelData(registryMap)
         Utils.getModelData()
+        viewRegistry = newViewRegistry
     }
     fun removeScreenEntry(screenName: String) {
         var indexToRemove: Int = -1
@@ -84,7 +87,7 @@ class DataModel {
 
     }
 
-    fun setViewData(position: Int?, height: String, width: String, propertyId: String) {
+    fun setViewData(position: Int?, height: Int?, width: Int?, propertyId: String) {
         viewPosition = position
         viewHeight= height
         viewWidth = width
@@ -101,6 +104,23 @@ class DataModel {
         registryMap.clear()
         registryMap.addAll(modelList)
         Log.d("AKA", "Updated Data")
+    }
+
+    fun removeViewEntry(propertyId: String) {
+        var indexToRemove: Int = -1
+//        removeEntry
+        for ((index,entry) in viewRegistry.withIndex()) {
+            if(entry.propertyId.equals(propertyId)) {
+                Log.d("AKSHAY", "Removing index from - "+index)
+//                registryMap.removeAt(index)
+                indexToRemove = index
+            }
+        }
+        if (indexToRemove != -1) {
+            viewRegistry.removeAt(indexToRemove)
+//            Utils.storeModelData(viewRegistry )
+        }
+
     }
 
 }

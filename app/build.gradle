@@ -35,7 +35,7 @@ android {
 dependencies {
     implementation fileTree(include: ['*.jar', '*.aar'], dir: 'libs')
     implementation 'androidx.core:core-ktx:1.7.0'
-    implementation 'com.webengage:android-sdk:3.+'
+    implementation 'com.webengage:android-sdk:4.+'
 //    implementation 'com.webengage:we-personalization:1.0.0'
     implementation files('libs/we-personalization-debug.aar')
 

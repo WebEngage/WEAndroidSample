@@ -12,6 +12,7 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.core.content.edit
 import com.example.personalization_sample.model.DataModel
+import com.webengage.personalization.WEPersonalization
 import com.webengage.sdk.android.WebEngage
 
 class MainActivity : AppCompatActivity() {
@@ -41,6 +42,9 @@ class MainActivity : AppCompatActivity() {
 
         val arr = Utils.getModelData()
         DataModel.getInstance().updateData(arr)
+
+
+
 
 
         activityMain = findViewById(R.id.activity_main)
