@@ -9,7 +9,9 @@ class Utils {
     companion object {
         val prefs: SharedPrefsManager = SharedPrefsManager.get()
 
-        fun covertDpToPixel(dpValue: Float, scale: Int): Int {
+
+        fun covertDpToPixel(dpValue: Int): Int {
+            val scale = MainApplication.getContext().resources.displayMetrics.density
             return (dpValue * scale + 0.5f).toInt()
 
         }

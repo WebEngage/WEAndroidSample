@@ -13,6 +13,9 @@
         android:theme="@style/Theme.Personalizationsample"
         tools:targetApi="31">
         <activity
+            android:name=".RecyclerActivity"
+            android:exported="false" />
+        <activity
             android:name=".DynamicScreen"
             android:exported="false" />
         <activity

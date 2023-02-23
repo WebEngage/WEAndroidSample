@@ -195,9 +195,18 @@ class CustomScreen : AppCompatActivity() {
     }
 
     fun openScreen(entry: Model) {
-        val intent = Intent(this, DynamicScreen::class.java)
-        intent.putExtra("pageData", Utils.convertModelToString(entry))
-        startActivity(intent)
+        if(entry.isRecyclerView) {
+            Log.d("WEP", "opening DynamicScreen")
+            val intent = Intent(this, RecyclerActivity::class.java)
+            intent.putExtra("pageData", Utils.convertModelToString(entry))
+            startActivity(intent)
+        } else {
+            Log.d("WEP", "opening Recycler screen")
+
+            val intent = Intent(this, DynamicScreen::class.java)
+            intent.putExtra("pageData", Utils.convertModelToString(entry))
+            startActivity(intent)
+        }
     }
 
     fun deleteEntry(screenName: String) {

@@ -3,7 +3,7 @@ package com.example.personalization_sample.model
 import android.view.View
 
 data class Model (
-    val listSize: Int? = 0,
+    var listSize: Int? = 0,
     val screenName: String = "",
     val eventName: String = "",
     val isRecyclerView: Boolean = false,

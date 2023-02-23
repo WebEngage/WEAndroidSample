@@ -22,7 +22,7 @@ import com.webengage.personalization.callbacks.WEPlaceholderCallback
 import com.webengage.personalization.data.WECampaignData
 import com.webengage.sdk.android.WebEngage
 
-class DynamicScreen : AppCompatActivity() {
+class DynamicScreen : AppCompatActivity(), WECampaignCallback, WEPlaceholderCallback  {
     val TAG_CAMPAGIN: String = "WebEngage-Campaign"
     val TAG_VIEW: String = "WebEngage-View"
     private lateinit var modelData: Model
@@ -57,34 +57,17 @@ class DynamicScreen : AppCompatActivity() {
 
     override fun onStart() {
         super.onStart()
-        WEPersonalization.Companion.get().registerWECampaignCallback(object : WECampaignCallback {
+        WEPersonalization.Companion.get().registerWECampaignCallback(this);
+    }
 
-            override fun onCampaignPrepared(data: WECampaignData): WECampaignData? {
-                Log.d(TAG_CAMPAGIN, "onCampaignPrepared called for "+data.targetViewId)
-                return data
-            }
-
-            override fun onCampaignClicked(actionId: String, deepLink: String, data: WECampaignData): Boolean {
-                Log.d(TAG_CAMPAGIN, "onCampaignShown called for "+data.targetViewId)
-                return false
-            }
-
-            override fun onCampaignShown(data: WECampaignData) {
-                Log.d(TAG_CAMPAGIN, "onCampaignShown called for "+data.targetViewId)
-            }
-
-            override fun onCampaignException(campaignId: String?, targetViewId: String, error: Exception) {
-                Log.d(TAG_CAMPAGIN, "onCampaignException called for "+targetViewId)
-            }
-
-        });
+    override fun onStop() {
+        super.onStop()
+        WEPersonalization.Companion.get().unregisterWECampaignCallback(this);
     }
 
     fun attachScreen() {
         val container = findViewById<LinearLayout>(R.id.dynamicScreenLayout)
         container.removeAllViews()
-
-//        val list = dataModel.getData()
 
         Log.d("AKSHAY", "list inside custom screen " + listSize)
 
@@ -93,16 +76,11 @@ class DynamicScreen : AppCompatActivity() {
         itemListLayout.layoutParams =
             LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT)
 
-//        val dpValue = 200 // set your dp value here
-//        val scale = resources.displayMetrics.density
-//        val pixelValue = (dpValue * scale + 0.5f).toInt()
         val scale = resources.displayMetrics.density
-
         val weInlineViewList: ArrayList<String> = ArrayList()
 
         for (entry in 0..listSize) {
             val inlinePosition = checkIfInlineViewPosition(entry)
-            Log.d("AKSHAY", "List entry - " + entry + " | Inline pos - " + inlinePosition)
             if (inlinePosition == -1) {
                 val screenNameTextView = TextView(this)
                 screenNameTextView.text = "List - ${entry}"
@@ -110,7 +88,7 @@ class DynamicScreen : AppCompatActivity() {
                 screenNameTextView.layoutParams =
                     LinearLayout.LayoutParams(
                         LinearLayout.LayoutParams.MATCH_PARENT,
-                        Utils.covertDpToPixel(scale, 200)
+                        Utils.covertDpToPixel(200)
                     )
                 itemListLayout.addView(screenNameTextView)
             } else {
@@ -124,13 +102,12 @@ class DynamicScreen : AppCompatActivity() {
                 inlineView = WEInlineView(applicationContext, propertyId)
                 weInlineViewList.add(propertyId)
                 if (height != 0) {
-                    layoutHeight = Utils.covertDpToPixel(scale, height)
+                    layoutHeight = Utils.covertDpToPixel(height)
                 }
                 if (width != 0) {
-                    layoutWidth = Utils.covertDpToPixel(scale, width)
+                    layoutWidth = Utils.covertDpToPixel( width)
                     Log.d("AKSHAY", "layoutWidth- " + layoutWidth+" | PID "+propertyId+inlinePosition)
                 }
-//TODO
                 val params =
                     LinearLayout.LayoutParams(layoutWidth, layoutHeight)
 //                Utils.covertDpToPixel(scale, 200)
@@ -141,23 +118,6 @@ class DynamicScreen : AppCompatActivity() {
             }
 
         }
-        if (isRecyclerView) {
-            val recyclerView: RecyclerView = RecyclerView(this)
-            val layoutManager = LinearLayoutManager(this)
-            recyclerView.layoutManager = layoutManager
-            recyclerView.setBackgroundResource(R.color.teal_700)
-            recyclerView.layoutParams = LinearLayout.LayoutParams(
-                LinearLayout.LayoutParams.MATCH_PARENT,
-                LinearLayout.LayoutParams.MATCH_PARENT
-            )
-//            adapter
-//
-
-
-            recyclerView.addView(itemListLayout)
-            container.addView(recyclerView)
-        }
-        else {
             val scrollViewLayout = ScrollView(this)
 
             scrollViewLayout.setBackgroundResource(R.color.teal_700)
@@ -168,32 +128,13 @@ class DynamicScreen : AppCompatActivity() {
 
             scrollViewLayout.addView(itemListLayout)
             container.addView(scrollViewLayout)
-        }
 
         for (propertyId in weInlineViewList) {
             Log.d("TAG", "propertyId: " + propertyId)
             val inView: WEInlineView = container.findViewWithTag(propertyId)
 //        inView.setBackgroundResource(R.color.black)
             if (inView != null) {
-                inView.load(propertyId, object : WEPlaceholderCallback {
-                    override fun onDataReceived(data: WECampaignData) {
-                        Log.d(TAG_VIEW, "onDataReceived: " + propertyId)
-                    }
-
-                    override fun onPlaceholderException(
-                        campaignId: String?,
-                        targetViewId: String,
-                        error: Exception
-                    ) {
-                        Log.d(TAG_VIEW, "onPlaceholderException inside: " + propertyId)
-
-                    }
-
-                    override fun onRendered(data: WECampaignData) {
-                        Log.d(TAG_VIEW, "onRendered inside: " + propertyId)
-                    }
-
-                })
+                inView.load(propertyId, this)
             }
         }
 
@@ -254,20 +195,40 @@ class DynamicScreen : AppCompatActivity() {
         return -1
     }
 
-//    override fun onDataReceived(data: WECampaignData) {
-//        TODO("Not yet implemented")
-//    }
-//
-//    override fun onPlaceholderException(
-//        campaignId: String?,
-//        targetViewId: String,
-//        error: Exception
-//    ) {
-//        TODO("Not yet implemented")
-//    }
-//
-//    override fun onRendered(data: WECampaignData) {
-//        TODO("Not yet implemented")
-//    }
+    override fun onCampaignPrepared(data: WECampaignData): WECampaignData? {
+        Log.d(TAG_CAMPAGIN, "onCampaignPrepared called for "+data.targetViewId)
+        return data
+    }
+
+    override fun onCampaignClicked(actionId: String, deepLink: String, data: WECampaignData): Boolean {
+        Log.d(TAG_CAMPAGIN, "onCampaignShown called for "+data.targetViewId)
+        return false
+    }
+
+    override fun onCampaignShown(data: WECampaignData) {
+        Log.d(TAG_CAMPAGIN, "onCampaignShown called for "+data.targetViewId)
+    }
+
+    override fun onCampaignException(campaignId: String?, targetViewId: String, error: Exception) {
+        Log.d(TAG_CAMPAGIN, "onCampaignException called for "+targetViewId)
+    }
+
+    override fun onDataReceived(data: WECampaignData) {
+        Log.d(TAG_VIEW, "onDataReceived: " + data.targetViewId)
+    }
+
+    override fun onPlaceholderException(
+        campaignId: String?,
+        targetViewId: String,
+        error: Exception
+    ) {
+        Log.d(TAG_VIEW, "onPlaceholderException inside: " + targetViewId)
+
+    }
+
+    override fun onRendered(data: WECampaignData) {
+        Log.d(TAG_VIEW, "onRendered inside: " + data.targetViewId)
+    }
+
 
 }
