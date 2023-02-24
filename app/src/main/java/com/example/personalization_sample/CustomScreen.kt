@@ -50,52 +50,30 @@ class CustomScreen : AppCompatActivity() {
 //        listView.adapter = listAdapter
 
         addScreenButton.setOnClickListener {
-            Log.d("Ak", "add screen clicked")
-//            Intent intent = Inten
             val intent = Intent(this, ScreenDetails::class.java)
             startActivity(intent)
-//            Toast.makeText(applicationContext, " add screen", Toast.LENGTH_LONG).show()
-//            createList(container)
             createList()
 
         }
     }
 
     fun createList() {
-        Log.d("AKSHAY", "create List called inside custom screen")
         val container = findViewById<LinearLayout>(R.id.cusomLinearLayout)
         container.removeAllViews()
 
         val list = dataModel.getData()
-        Log.d("AKSHAY", "list inside custom screen "+list)
-
-//        val itemTopLevelLayout = LinearLayout(this)
-//        itemTopLevelLayout.orientation = LinearLayout.HORIZONTAL
-//        itemTopLevelLayout.setBackgroundResource(R.color.teal_700)
-//
-////        itemMarginLayoutLayoutParams.setMargins(0,50,0,50)
-//        itemTopLevelLayout.layoutParams = LinearLayout.LayoutParams(
-//            LinearLayout.LayoutParams.MATCH_PARENT,
-//            LinearLayout.LayoutParams.WRAP_CONTENT
-//        )
-//
 
         val itemListLayout = LinearLayout(this)
         itemListLayout.orientation = LinearLayout.VERTICAL
-//        layoutParams.setMargins(16, 16, 16, 16)
         val layoutParams = LinearLayout.LayoutParams(
             LinearLayout.LayoutParams.MATCH_PARENT,
             LinearLayout.LayoutParams.WRAP_CONTENT,
             1f
         )
-        itemListLayout.setBackgroundResource(R.color.teal_200) // set the background to a border drawable
+        itemListLayout.setBackgroundResource(R.color.card)
 
         layoutParams.setMargins(0,50,0,50)
         itemListLayout.layoutParams = layoutParams
-
-
-//        2 Margin Layout
-
 
         for (entry in list) {
             val itemLayout = LinearLayout(this)
@@ -105,17 +83,15 @@ class CustomScreen : AppCompatActivity() {
                 LinearLayout.LayoutParams.WRAP_CONTENT,
                 LinearLayout.LayoutParams.WRAP_CONTENT
             )
-//            itemLayout.setBackgroundResource(R.color.teal_700)
 
             itemLayoutParams.setMargins(0,100,0,50)
             itemLayout.layoutParams = itemLayoutParams
-//            itemLayout.setBackgroundResource(R.color.teal_200) // set the background to a border drawable
 
             // Add the screen name TextView
             val screenNameTextView = TextView(this)
 
             screenNameTextView.text = "Screen Name ${entry.screenName}"
-            screenNameTextView.setTextSize(TypedValue.COMPLEX_UNIT_SP, 22f)
+            screenNameTextView.setTextSize(TypedValue.COMPLEX_UNIT_SP, 30f)
 
             screenNameTextView.layoutParams = LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT)
             itemLayout.addView(screenNameTextView)
@@ -136,8 +112,6 @@ class CustomScreen : AppCompatActivity() {
             eventTextView.layoutParams = LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT)
             itemLayout.addView(eventTextView)
 
-
-
             val itemButtonLayout = LinearLayout(this)
             itemButtonLayout.orientation = LinearLayout.VERTICAL
             val itemButtonLayoutParams = LinearLayout.LayoutParams(
@@ -145,7 +119,6 @@ class CustomScreen : AppCompatActivity() {
                 LinearLayout.LayoutParams.WRAP_CONTENT,
                 1f
             )
-//            itemButtonLayout.setBackgroundResource(R.color.teal_700)
             itemButtonLayout.layoutParams = itemButtonLayoutParams
 
             itemButtonLayoutParams.setMargins(0,50,0,50)
@@ -175,34 +148,26 @@ class CustomScreen : AppCompatActivity() {
             deleteButton.setOnClickListener {
                 deleteEntry(entry.screenName)
             }
-//            openButton.layoutParams = LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT)
             itemButtonLayout.addView(deleteButton)
 
-            // Add the list item to the parent LinearLayout
             itemListLayout.addView(itemLayout)
             itemListLayout.addView(itemButtonLayout)
         }
-//        itemTopLevelLayout.addView(itemListLayout)
 
 
 // Add the horizontal LinearLayout to the parent layout inside a ScrollView
         val scrollView = ScrollView(this)
         scrollView.layoutParams = LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT)
-//        scrollView.addView(itemTopLevelLayout)
         scrollView.addView(itemListLayout)
-//        container.addView(scrollView)
         container.addView(scrollView)
     }
 
     fun openScreen(entry: Model) {
         if(entry.isRecyclerView) {
-            Log.d("WEP", "opening DynamicScreen")
             val intent = Intent(this, RecyclerActivity::class.java)
             intent.putExtra("pageData", Utils.convertModelToString(entry))
             startActivity(intent)
         } else {
-            Log.d("WEP", "opening Recycler screen")
-
             val intent = Intent(this, DynamicScreen::class.java)
             intent.putExtra("pageData", Utils.convertModelToString(entry))
             startActivity(intent)
@@ -216,17 +181,6 @@ class CustomScreen : AppCompatActivity() {
 
     override fun onResume() {
         super.onResume()
-        Log.d("AKC", "Resumed")
-        Log.d("AKC", " size - "+dataModel.getListSize())
-        val list = dataModel.getData()
-        if (list != null) {
-            for (item in list) {
-                //            println(item)
-                Log.d("AKC", "item - "+item)
-            }
-        } else {
-            Log.d("AKC", "no list  - ")
-        }
         createList()
     }
 }

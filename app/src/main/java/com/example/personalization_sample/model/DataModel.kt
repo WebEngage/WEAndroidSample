@@ -75,7 +75,7 @@ class DataModel {
 //        removeEntry
         for ((index,entry) in registryMap.withIndex()) {
             if(entry.screenName.equals(screenName)) {
-                Log.d("AKSHAY", "Removing index from - "+index)
+                Log.d("WebEngage-Inline-App", "Removing index from - "+index)
 //                registryMap.removeAt(index)
                 indexToRemove = index
             }
@@ -111,7 +111,7 @@ class DataModel {
 //        removeEntry
         for ((index,entry) in viewRegistry.withIndex()) {
             if(entry.propertyId.equals(propertyId)) {
-                Log.d("AKSHAY", "Removing index from - "+index)
+                Log.d("WebEngage-Inline-App", "Removing index from - "+index)
 //                registryMap.removeAt(index)
                 indexToRemove = index
             }

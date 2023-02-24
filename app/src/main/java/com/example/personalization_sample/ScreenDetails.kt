@@ -15,7 +15,6 @@ class ScreenDetails : AppCompatActivity() {
     val dataModel = DataModel.getInstance()
     var isCheked: Boolean = false
 
-
     private lateinit var sizeEdit: EditText
     private lateinit var screenEdit: EditText
     private lateinit var eventEdit: EditText
@@ -38,9 +37,7 @@ class ScreenDetails : AppCompatActivity() {
         saveButton = findViewById(R.id.saveData)
         checkBox = findViewById(R.id.checkBox)
 
-
         addDataButton.setOnClickListener {
-            // Add data to list
             addViewData()
         }
 
@@ -55,22 +52,14 @@ class ScreenDetails : AppCompatActivity() {
             val list = dataModel.getData()
             var isAlreadyExist  = false
             for(i in list) {
-                Log.d("AKQ", "Data - "+i)
                 if(screenName == i.screenName) {
                     isAlreadyExist = true
                 }
             }
             if(!isAlreadyExist && !screenName.isNullOrEmpty() && size != null) {
-            dataModel.setData(size, screenName, eventName, isCheked)
+                dataModel.setData(size, screenName, eventName, isCheked)
                 finish();
-//            val latestList = dataModel.getData()
-//            Utils.storeModelData(latestList)
-//            Utils.getModelData()
-
-//            createList()
-//                TODO() - store this into sharedPref and fetch it on app open
             } else {
-
                 Toast.makeText(applicationContext, "Enter Valid Data", Toast.LENGTH_LONG).show()
             }
         }
@@ -85,11 +74,6 @@ class ScreenDetails : AppCompatActivity() {
         height = dialogView.findViewById(R.id.height)
         width = dialogView.findViewById(R.id.width)
         propertyId = dialogView.findViewById(R.id.propertyId)
-
-
-
-        Toast.makeText(this, "Listener attached for addViewBtn", Toast.LENGTH_SHORT).show()
-
         addViewBtn.setOnClickListener {
             Toast.makeText(this, "View Added", Toast.LENGTH_SHORT).show()
             if(!propertyId.text.toString().isNullOrEmpty()) {
@@ -97,49 +81,30 @@ class ScreenDetails : AppCompatActivity() {
                 createList()
             }
             builder.dismiss()
-
-
         }
     }
 
     fun registerView() {
-//        position.
         val positionView: Int? = position.text.toString().toIntOrNull()
         val heightView: Int? = height.text.toString().toIntOrNull()
         val widthView: Int? = width.text.toString().toIntOrNull()
         val propertyIdView: String = propertyId.text.toString()
-        Toast.makeText(this, "Register View - "+positionView, Toast.LENGTH_SHORT).show()
         dataModel.setViewData(positionView, heightView, widthView, propertyIdView)
-//        val list = dataModel.getViewData()
-//        var isAlreadyExist  = false
-//        for(i in list) {
-//            Log.d("AKQ", "list - "+i)
-//        }
     }
 
     fun showDailog (dialogView: View, builder: AlertDialog) {
-
-        // Set the view for the dialog builder
         builder.setView(dialogView)
-
-        // Add any desired dialog options
         builder.setTitle("Add View Data")
-
-        // Call show() on the dialog builder to display the modal dialog
         builder.show()
     }
     override fun onResume() {
         super.onResume()
-        val inflater = LayoutInflater.from(applicationContext)
-        val layout = inflater.inflate(R.layout.activity_screen_details, null)
-        val container = findViewById<LinearLayout>(R.id.screenList)
         createList()
     }
 
     fun createList() {
         val container = findViewById<LinearLayout>(R.id.screenList)
         container.removeAllViews()
-
 
         val list = dataModel.getViewData()
         val itemListLayout = LinearLayout(this)
@@ -151,7 +116,6 @@ class ScreenDetails : AppCompatActivity() {
             val itemLayout = LinearLayout(this)
             itemLayout.orientation = LinearLayout.VERTICAL
             itemLayout.layoutParams = LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT)
-//            itemLayout.setBackgroundResource(R.color.teal_200) // set the background to a border drawable
 
             // Add the screen name TextView
             val screenNameTextView = TextView(this)
@@ -175,9 +139,6 @@ class ScreenDetails : AppCompatActivity() {
             val itemButtonLayout = LinearLayout(this)
             itemButtonLayout.layoutParams = LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT)
 
-
-
-
             // Add the edit button
             val deleteButton = Button(this)
             deleteButton.text = "Delete"
@@ -185,13 +146,11 @@ class ScreenDetails : AppCompatActivity() {
                 LinearLayout.LayoutParams.WRAP_CONTENT,
                 LinearLayout.LayoutParams.WRAP_CONTENT
             )
-//            layoutParam.gravity = Gravity.END // TODO - Move button to Right
             deleteButton.layoutParams = layoutParam
             deleteButton.setOnClickListener {
                 deleteViewEntry(i.propertyId)
             }
             itemButtonLayout.addView(deleteButton)
-
 
             // Add the list item to the parent LinearLayout
             itemListLayout.addView(itemLayout)
@@ -202,15 +161,10 @@ class ScreenDetails : AppCompatActivity() {
         val scrollView = ScrollView(this)
         scrollView.layoutParams = LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT)
         scrollView.addView(itemListLayout)
-//        container.addView(scrollView)
         container.addView(scrollView)
     }
     fun deleteViewEntry(propertyId: String) {
         dataModel.removeViewEntry(propertyId)
         createList()
-
     }
-
-
-
 }

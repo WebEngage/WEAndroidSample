@@ -8,8 +8,6 @@ class Utils {
 
     companion object {
         val prefs: SharedPrefsManager = SharedPrefsManager.get()
-
-
         fun covertDpToPixel(dpValue: Int): Int {
             val scale = MainApplication.getContext().resources.displayMetrics.density
             return (dpValue * scale + 0.5f).toInt()
@@ -23,19 +21,12 @@ class Utils {
 
         fun getModelData(): ArrayList<Model> {
             val jsonString = prefs.getString("registry", null)
-
-// Convert the JSON string back to a Model object
             val gson = Gson()
             var modelList: ArrayList<Model> = arrayListOf()
-//            val modelList: ArrayList<Model> = arrayListOf()
-
-//            val model = gson.fromJson(jsonString, Model::class.java)
             if(!jsonString.isNullOrEmpty()) {
                 modelList =
                     gson.fromJson(jsonString, object : TypeToken<ArrayList<Model>>() {}.type)
             }
-//            Log.d("AKA","model - "+modelList[0].screenName)
-//            return model;
             return modelList
         }
 
@@ -47,15 +38,9 @@ class Utils {
 
         fun convertStringToModel(jsonString: String): Model {
             val gson = Gson()
-//            var modelList: ArrayList<Model> = arrayListOf()
-//            val modelList: ArrayList<Model> = arrayListOf()
             var modelData: Model = Model(0, "Screen Name", "Event Name", false, ArrayList())
-
-//            val model = gson.fromJson(jsonString, Model::class.java)
             if(!jsonString.isNullOrEmpty()) {
                 modelData = gson.fromJson(jsonString, Model::class.java)
-
-//                gson.fromJson(jsonString, object : TypeToken<ArrayList<Model>>() {}.type)
             }
             return modelData
         }

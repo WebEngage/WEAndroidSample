@@ -20,7 +20,7 @@ class MainApplication: Application() {
         context = applicationContext
         Log.d("WEH", "Main Application called");
         val webEngageConfig = WebEngageConfig.Builder()
-            .setWebEngageKey("~47b66161")
+            .setWebEngageKey("~311c5274")
             .setDebugMode(true) // only in development mode
             .build()
         WEPersonalization.get().init()
@@ -33,10 +33,3 @@ class MainApplication: Application() {
     }
 }
 
-
-//class MainApplication : Application() {
-//    override fun onCreate() {
-//        super.onCreate()
-//        // Initialize any libraries or dependencies here
-//    }
-//}

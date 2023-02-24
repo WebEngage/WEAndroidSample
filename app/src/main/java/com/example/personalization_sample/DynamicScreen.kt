@@ -39,7 +39,7 @@ class DynamicScreen : AppCompatActivity(), WECampaignCallback, WEPlaceholderCall
         setContentView(R.layout.activity_dynamic_screen)
         val ss: String = intent.getStringExtra("pageData").toString()
         modelData = Utils.convertStringToModel(ss)
-        Log.d("AKSHAY", "intent data " + modelData)
+        Log.d("WebEngage-Inline-App", "intent data " + modelData)
         listSize = modelData?.listSize!!
         screenName = modelData.screenName
         eventName = modelData.eventName
@@ -51,6 +51,9 @@ class DynamicScreen : AppCompatActivity(), WECampaignCallback, WEPlaceholderCall
             turnOnModal()
         }
         WebEngage.get().analytics().screenNavigated(screenName)
+        if(!eventName.isNullOrEmpty()) {
+            WebEngage.get().analytics().track(eventName)
+        }
         attachScreen()
 
     }
@@ -69,14 +72,13 @@ class DynamicScreen : AppCompatActivity(), WECampaignCallback, WEPlaceholderCall
         val container = findViewById<LinearLayout>(R.id.dynamicScreenLayout)
         container.removeAllViews()
 
-        Log.d("AKSHAY", "list inside custom screen " + listSize)
+        Log.d("WebEngage-Inline-App", "List Size " + listSize)
 
         val itemListLayout = LinearLayout(this)
         itemListLayout.orientation = LinearLayout.VERTICAL
         itemListLayout.layoutParams =
             LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT)
 
-        val scale = resources.displayMetrics.density
         val weInlineViewList: ArrayList<String> = ArrayList()
 
         for (entry in 0..listSize) {
@@ -98,7 +100,6 @@ class DynamicScreen : AppCompatActivity(), WECampaignCallback, WEPlaceholderCall
                 val propertyId: String = viewRegistryData.propertyId
                 val height: Int = viewRegistryData.height!!
                 val width: Int = viewRegistryData.width!!
-                Log.d("AKSHAY", "Loading else - " + propertyId)
                 inlineView = WEInlineView(applicationContext, propertyId)
                 weInlineViewList.add(propertyId)
                 if (height != 0) {
@@ -106,15 +107,13 @@ class DynamicScreen : AppCompatActivity(), WECampaignCallback, WEPlaceholderCall
                 }
                 if (width != 0) {
                     layoutWidth = Utils.covertDpToPixel( width)
-                    Log.d("AKSHAY", "layoutWidth- " + layoutWidth+" | PID "+propertyId+inlinePosition)
+                    Log.d("WebEngage-Inline-App", "layoutWidth- " + layoutWidth+" | PID "+propertyId)
                 }
                 val params =
                     LinearLayout.LayoutParams(layoutWidth, layoutHeight)
-//                Utils.covertDpToPixel(scale, 200)
                 inlineView.layoutParams = params
                 inlineView.setBackgroundResource(R.color.purple_500)
                 itemListLayout.addView(inlineView)
-                Log.d("AKSHAY", "Loading - " + propertyId)
             }
 
         }
@@ -123,7 +122,7 @@ class DynamicScreen : AppCompatActivity(), WECampaignCallback, WEPlaceholderCall
             scrollViewLayout.setBackgroundResource(R.color.teal_700)
             scrollViewLayout.layoutParams = LinearLayout.LayoutParams(
                 LinearLayout.LayoutParams.MATCH_PARENT,
-                LinearLayout.LayoutParams.MATCH_PARENT   // changed to MATCH
+                LinearLayout.LayoutParams.MATCH_PARENT
             )
 
             scrollViewLayout.addView(itemListLayout)
@@ -132,7 +131,6 @@ class DynamicScreen : AppCompatActivity(), WECampaignCallback, WEPlaceholderCall
         for (propertyId in weInlineViewList) {
             Log.d("TAG", "propertyId: " + propertyId)
             val inView: WEInlineView = container.findViewWithTag(propertyId)
-//        inView.setBackgroundResource(R.color.black)
             if (inView != null) {
                 inView.load(propertyId, this)
             }
@@ -164,20 +162,31 @@ class DynamicScreen : AppCompatActivity(), WECampaignCallback, WEPlaceholderCall
 
         navigateButton.setOnClickListener {
             val navigationScreen = navigationText.text.toString()
-            navigateToScreen(navigationScreen)
-            Toast.makeText(this, "Let's Navigate to " + navigationScreen, Toast.LENGTH_SHORT).show()
+            navigateToScreen(navigationScreen, builder)
             builder.dismiss()
         }
     }
 
-    fun navigateToScreen(screenName: String) {
+    fun navigateToScreen(screenName: String, builder: AlertDialog) {
         val list = dataModel.getData()
+        var isScreenFound = false
         for (entry in list) {
             if (entry.screenName.equals(screenName)) {
-                val intent = Intent(this, DynamicScreen::class.java)
-                intent.putExtra("pageData", Utils.convertModelToString(entry))
-                startActivity(intent)
+                if(entry.isRecyclerView) {
+                    val intent = Intent(this, RecyclerActivity::class.java)
+                    intent.putExtra("pageData", Utils.convertModelToString(entry))
+                    startActivity(intent)
+                } else {
+                    val intent = Intent(this, DynamicScreen::class.java)
+                    intent.putExtra("pageData", Utils.convertModelToString(entry))
+                    startActivity(intent)
+                }
+                isScreenFound = true
+                builder.dismiss()
             }
+        }
+        if(isScreenFound) {
+            Toast.makeText(this,"Screen Not Found Enter valid screen", Toast.LENGTH_SHORT).show()
         }
 
     }

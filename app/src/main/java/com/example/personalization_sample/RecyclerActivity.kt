@@ -2,11 +2,18 @@ package com.example.personalization_sample
 
 import android.app.ActionBar
 import android.app.ActionBar.LayoutParams
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
+import android.view.LayoutInflater
+import android.widget.Button
+import android.widget.EditText
+import android.widget.Toast
+import androidx.appcompat.app.AlertDialog
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.example.personalization_sample.model.DataModel
 import com.example.personalization_sample.model.Model
 import com.example.personalization_sample.model.ViewModel
 import com.webengage.sdk.android.WebEngage
@@ -18,6 +25,8 @@ class RecyclerActivity : AppCompatActivity() {
     var screenName: String = ""
     var eventName: String = ""
     var viewRegistry: ArrayList<ViewModel> = ArrayList<ViewModel>()
+    val dataModel = DataModel.getInstance()
+    private lateinit var navigationButton: Button
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_recycler)
@@ -31,6 +40,15 @@ class RecyclerActivity : AppCompatActivity() {
         eventName = modelData.eventName
         viewRegistry = modelData.viewRegistry
         WebEngage.get().analytics().screenNavigated(screenName)
+        if(!eventName.isNullOrEmpty()) {
+            WebEngage.get().analytics().track(eventName)
+        }
+
+        navigationButton = findViewById(R.id.navigation)
+
+        navigationButton.setOnClickListener {
+            turnOnModal()
+        }
 
         Log.d("WEP", "Recycler: intent data " + modelData)
 
@@ -50,6 +68,51 @@ class RecyclerActivity : AppCompatActivity() {
         val adapter = ViewModelAdapter(viewModelList)
         recyclerView.adapter = adapter
         recyclerView.layoutManager = LinearLayoutManager(this)
+
+    }
+    fun turnOnModal() {
+        val dialogView = LayoutInflater.from(this).inflate(R.layout.modal_navigation, null)
+        val builder = AlertDialog.Builder(this).create()
+        val navigationText = dialogView.findViewById<EditText>(R.id.navigationTextBox)
+        val navigateButton = dialogView.findViewById<Button>(R.id.navigateToButton)
+        builder.setView(dialogView)
+        // Add any desired dialog options
+        builder.setTitle("Add Screen Navigation Data")
+        // Call show() on the dialog builder to display the modal dialog
+        builder.show()
+
+        navigateButton.setOnClickListener {
+            val navigationScreen = navigationText.text.toString()
+            navigateToScreen(navigationScreen, builder)
+            Toast.makeText(this, "Let's Navigate to " + navigationScreen, Toast.LENGTH_SHORT).show()
+
+        }
+
+
+
+    }
+
+    fun navigateToScreen(screenName: String, builder: AlertDialog) {
+        val list = dataModel.getData()
+        var isScreenFound = false
+        for (entry in list) {
+            if (entry.screenName.equals(screenName)) {
+                if(entry.isRecyclerView) {
+                    val intent = Intent(this, RecyclerActivity::class.java)
+                    intent.putExtra("pageData", Utils.convertModelToString(entry))
+                    startActivity(intent)
+                } else {
+                    val intent = Intent(this, DynamicScreen::class.java)
+                    intent.putExtra("pageData", Utils.convertModelToString(entry))
+                    startActivity(intent)
+                }
+                isScreenFound = true
+                builder.dismiss()
+            }
+        }
+        if(isScreenFound) {
+            Toast.makeText(this,"Screen Not Found Enter valid screen", Toast.LENGTH_SHORT).show()
+        }
 
     }
 }

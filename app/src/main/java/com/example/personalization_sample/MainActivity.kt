@@ -42,19 +42,12 @@ class MainActivity : AppCompatActivity() {
 
         val arr = Utils.getModelData()
         DataModel.getInstance().updateData(arr)
-
-
-
-
-
         activityMain = findViewById(R.id.activity_main)
         editText = findViewById(R.id.editText)
         saveButton = findViewById(R.id.button)
         logoutButton = findViewById(R.id.logoutButton)
         customscreenButton = findViewById(R.id.customScreenButton);
         val strData = prefs.getString("registry", "")
-        Log.d("AKS", "Str data - "+strData)
-//        Log.d("AKS", "Str data - "+strData[0])
 
 
         val cuid = prefs.getString("cuid", "")
