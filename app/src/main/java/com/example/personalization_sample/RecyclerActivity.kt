@@ -110,7 +110,7 @@ class RecyclerActivity : AppCompatActivity() {
                 builder.dismiss()
             }
         }
-        if(isScreenFound) {
+        if(!isScreenFound) {
             Toast.makeText(this,"Screen Not Found Enter valid screen", Toast.LENGTH_SHORT).show()
         }
 

@@ -1,43 +1,66 @@
 <?xml version="1.0" encoding="utf-8"?>
-<manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools">
+    <manifest xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools"
+        package="com.example.personalization_sample">
+    <queries>
+        <package android:name="com.google.android.youtube" />
+        <intent>
+            <action android:name="android.intent.action.VIEW" />
 
-    <application
-        android:name=".MainApplication"
-        android:allowBackup="false"
-        android:dataExtractionRules="@xml/data_extraction_rules"
-        android:fullBackupContent="@xml/backup_rules"
-        android:icon="@mipmap/ic_launcher"
-        android:label="@string/app_name"
-        android:supportsRtl="true"
-        android:theme="@style/Theme.Personalizationsample"
-        tools:targetApi="31">
-        <activity
-            android:name=".RecyclerActivity"
-            android:exported="false" />
-        <activity
-            android:name=".DynamicScreen"
-            android:exported="false" />
-        <activity
-            android:name=".ScreenDetails"
-            android:exported="false" />
-        <activity
-            android:name=".CustomScreen"
-            android:exported="false" />
+            <category android:name="android.intent.category.BROWSABLE" />
+            <data android:scheme="https"
+                android:host="www.youtube.com"/>
+        </intent>
+    </queries>
+        <application
+            android:name=".MainApplication"
+            android:allowBackup="false"
+            android:dataExtractionRules="@xml/data_extraction_rules"
+            android:fullBackupContent="@xml/backup_rules"
+            android:icon="@mipmap/ic_launcher"
+            android:label="@string/app_name"
+            android:supportsRtl="true"
+            android:theme="@style/Theme.Personalizationsample"
+            tools:targetApi="31">
 
-        <meta-data
-            android:name="com.webengage.sdk.android.environment"
-            android:value="us" />
+            <activity
+                android:name=".RecyclerActivity"
+                android:exported="false" />
+            <activity
+                android:name=".DynamicScreen"
+                android:exported="true">
+                <intent-filter>
+                    <action android:name="android.intent.action.VIEW" />
+                    <category android:name="android.intent.category.DEFAULT" />
+                    <category android:name="android.intent.category.BROWSABLE" />
+                    <!-- Accepts URIs that begin with "https://www.webengage.com/screen1" -->
+                    <data
+                        android:scheme="https"
+                        android:host="www.webengage.com"/>
+                    <!-- note that the leading "/" is required for pathPrefix-->
+                </intent-filter>
+            </activity>
 
-        <activity
-            android:name=".MainActivity"
-            android:exported="true">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
+            <activity
+                android:name=".ScreenDetails"
+                android:exported="false" />
+            <activity
+                android:name=".CustomScreen"
+                android:exported="false" />
 
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-        </activity>
-    </application>
+            <meta-data
+                android:name="com.webengage.sdk.android.environment"
+                android:value="us" />
 
-</manifest>
+            <activity
+                android:name=".MainActivity"
+                android:exported="true">
+                <intent-filter>
+                    <action android:name="android.intent.action.MAIN" />
+
+                    <category android:name="android.intent.category.LAUNCHER" />
+                </intent-filter>
+            </activity>
+        </application>
+
+    </manifest>

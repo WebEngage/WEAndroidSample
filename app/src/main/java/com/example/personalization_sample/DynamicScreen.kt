@@ -2,6 +2,7 @@ package com.example.personalization_sample
 
 import android.app.ActionBar.LayoutParams
 import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -20,6 +21,8 @@ import com.webengage.personalization.WEPersonalization
 import com.webengage.personalization.callbacks.WECampaignCallback
 import com.webengage.personalization.callbacks.WEPlaceholderCallback
 import com.webengage.personalization.data.WECampaignData
+import com.webengage.personalization.utils.TAG
+import com.webengage.sdk.android.Logger
 import com.webengage.sdk.android.WebEngage
 
 class DynamicScreen : AppCompatActivity(), WECampaignCallback, WEPlaceholderCallback  {
@@ -37,25 +40,67 @@ class DynamicScreen : AppCompatActivity(), WECampaignCallback, WEPlaceholderCall
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_dynamic_screen)
-        val ss: String = intent.getStringExtra("pageData").toString()
-        modelData = Utils.convertStringToModel(ss)
-        Log.d("WebEngage-Inline-App", "intent data " + modelData)
-        listSize = modelData?.listSize!!
-        screenName = modelData.screenName
-        eventName = modelData.eventName
-        viewRegistry = modelData.viewRegistry
-        isRecyclerView = modelData.isRecyclerView
-        navigationButton = findViewById(R.id.navigation)
-
-        navigationButton.setOnClickListener {
-            turnOnModal()
+        val uri = intent.data
+        if(uri != null) {
+            val parameters = uri!!.pathSegments
+            val param = parameters[parameters.size - 1]
         }
+        val ss = intent.getStringExtra("pageData")
+        if(!ss.isNullOrEmpty()) {
+            Log.d("WebEngage-Inline-App", "ss value " + ss)
+            modelData = Utils.convertStringToModel(ss)
+        }
+
+        Log.d("WebEngage-Inline-App", "intent data " + modelData)
+
+
+
+if(modelData != null) {
+    listSize = modelData?.listSize!!
+    screenName = modelData.screenName
+    eventName = modelData.eventName
+    viewRegistry = modelData.viewRegistry
+    isRecyclerView = modelData.isRecyclerView
+    navigationButton = findViewById(R.id.navigation)
+    navigationButton.setOnClickListener {
+        turnOnModal()
+    }
+}
+
         WebEngage.get().analytics().screenNavigated(screenName)
         if(!eventName.isNullOrEmpty()) {
             WebEngage.get().analytics().track(eventName)
         }
         attachScreen()
 
+    }
+
+    private fun checkAndNavigateDeepLink(param: String?, deepLink: String, hostName: String) {
+        var isScreenFound = false
+        if(hostName.equals("www.youtube.com")) {
+            val intent = Intent(Intent.ACTION_VIEW, Uri.parse(deepLink))
+            intent.setPackage("com.google.android.youtube")
+            startActivity(intent)
+        } else {
+            val list = dataModel.getData()
+            var screenData: Model = Model(0, "", "", false, ArrayList<ViewModel>())
+            for (entry in list) {
+                if (entry.screenName.equals(param)) {
+                    screenData = entry
+                    isScreenFound = true
+                }
+            }
+            Log.d(TAG, "screenData " + screenData)
+            if (isScreenFound) {
+                val intent = Intent(Intent.ACTION_VIEW, Uri.parse(deepLink))
+                intent.setPackage("com.example.personalization_sample")
+                intent.putExtra("pageData", Utils.convertModelToString(screenData))
+                startActivity(intent)
+            } else {
+                Toast.makeText(applicationContext, "Screen is not Available", Toast.LENGTH_SHORT)
+                    .show()
+            }
+        }
     }
 
     override fun onStart() {
@@ -185,7 +230,7 @@ class DynamicScreen : AppCompatActivity(), WECampaignCallback, WEPlaceholderCall
                 builder.dismiss()
             }
         }
-        if(isScreenFound) {
+        if(!isScreenFound) {
             Toast.makeText(this,"Screen Not Found Enter valid screen", Toast.LENGTH_SHORT).show()
         }
 
@@ -210,8 +255,14 @@ class DynamicScreen : AppCompatActivity(), WECampaignCallback, WEPlaceholderCall
     }
 
     override fun onCampaignClicked(actionId: String, deepLink: String, data: WECampaignData): Boolean {
-        Log.d(TAG_CAMPAGIN, "onCampaignShown called for "+data.targetViewId)
-        return false
+        Log.d(TAG_CAMPAGIN, "onCampaignClicked called for "+data.targetViewId + " DL - "+deepLink)
+        val deepLinkData = deepLink.split("/")
+        val screenName = if (deepLinkData.size > 3 && deepLinkData[2].equals("www.webengage.com")) { deepLinkData[3] } else { "" }
+//        val screenName = deepLinkData[3]
+        val hostName = deepLinkData[2]
+        Log.d(TAG, "deepLinkData "+deepLinkData)
+        checkAndNavigateDeepLink(screenName, deepLink, hostName)
+        return true
     }
 
     override fun onCampaignShown(data: WECampaignData) {

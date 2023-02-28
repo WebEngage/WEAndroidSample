@@ -20,7 +20,7 @@ class MainApplication: Application() {
         context = applicationContext
         Log.d("WEH", "Main Application called");
         val webEngageConfig = WebEngageConfig.Builder()
-            .setWebEngageKey("~311c5274")
+            .setWebEngageKey("~47b66161")
             .setDebugMode(true) // only in development mode
             .build()
         WEPersonalization.get().init()
