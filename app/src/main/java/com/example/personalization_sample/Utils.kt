@@ -38,7 +38,7 @@ class Utils {
 
         fun convertStringToModel(jsonString: String): Model {
             val gson = Gson()
-            var modelData: Model = Model(0, "Screen Name", "Event Name", false, ArrayList())
+            var modelData: Model = Model(0, "Screen Name", "Event Name","", null,  false, ArrayList())
             if(!jsonString.isNullOrEmpty()) {
                 modelData = gson.fromJson(jsonString, Model::class.java)
             }

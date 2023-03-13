@@ -25,8 +25,11 @@ class ScreenDetails : AppCompatActivity() {
     private lateinit var height: EditText
     private lateinit var width: EditText
     private lateinit var propertyId: EditText
+    private lateinit var isCustomView: CheckBox
     private lateinit var addViewBtn: Button
     private lateinit var checkBox: CheckBox
+    private lateinit var idName: EditText
+    private lateinit var idVal: EditText
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_screen_details)
@@ -36,6 +39,9 @@ class ScreenDetails : AppCompatActivity() {
         addDataButton = findViewById(R.id.addData)
         saveButton = findViewById(R.id.saveData)
         checkBox = findViewById(R.id.checkBox)
+        idName = findViewById(R.id.idName)
+        idVal = findViewById(R.id.idValue)
+
 
         addDataButton.setOnClickListener {
             addViewData()
@@ -49,6 +55,8 @@ class ScreenDetails : AppCompatActivity() {
             val size = sizeEdit.text.toString().toIntOrNull()
             val screenName = screenEdit.text.toString()
             val eventName = eventEdit.text.toString()
+            val idName = idName.text.toString()
+            val idValue = idVal.text.toString().toIntOrNull()
             val list = dataModel.getData()
             var isAlreadyExist  = false
             for(i in list) {
@@ -57,7 +65,7 @@ class ScreenDetails : AppCompatActivity() {
                 }
             }
             if(!isAlreadyExist && !screenName.isNullOrEmpty() && size != null) {
-                dataModel.setData(size, screenName, eventName, isCheked)
+                dataModel.setData(size, screenName, eventName, idName, idValue, isCheked)
                 finish();
             } else {
                 Toast.makeText(applicationContext, "Enter Valid Data", Toast.LENGTH_LONG).show()
@@ -74,6 +82,8 @@ class ScreenDetails : AppCompatActivity() {
         height = dialogView.findViewById(R.id.height)
         width = dialogView.findViewById(R.id.width)
         propertyId = dialogView.findViewById(R.id.propertyId)
+        isCustomView = dialogView.findViewById(R.id.isCustom)
+
         addViewBtn.setOnClickListener {
             Toast.makeText(this, "View Added", Toast.LENGTH_SHORT).show()
             if(!propertyId.text.toString().isNullOrEmpty()) {
@@ -85,11 +95,14 @@ class ScreenDetails : AppCompatActivity() {
     }
 
     fun registerView() {
+
         val positionView: Int? = position.text.toString().toIntOrNull()
         val heightView: Int? = height.text.toString().toIntOrNull()
         val widthView: Int? = width.text.toString().toIntOrNull()
         val propertyIdView: String = propertyId.text.toString()
-        dataModel.setViewData(positionView, heightView, widthView, propertyIdView)
+//        boolean isChecked = ((CheckBox) findViewById(R.id.checkBox1)).isChecked()
+        val isCustomChecked: Boolean = isCustomView.isChecked
+        dataModel.setViewData(positionView, isCustomChecked, heightView, widthView, propertyIdView)
     }
 
     fun showDailog (dialogView: View, builder: AlertDialog) {

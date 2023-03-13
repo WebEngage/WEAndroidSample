@@ -1,19 +1,14 @@
 package com.example.personalization_sample
 
-import android.content.Context
 import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.util.Log
 import android.widget.Button
 import android.widget.EditText
 import android.widget.RelativeLayout
-import android.widget.TextView
-import android.widget.Toast
-import androidx.core.content.edit
+import androidx.appcompat.app.AppCompatActivity
 import com.example.personalization_sample.model.DataModel
-import com.webengage.personalization.WEPersonalization
 import com.webengage.sdk.android.WebEngage
+
 
 class MainActivity : AppCompatActivity() {
     private lateinit var activityMain: RelativeLayout
@@ -22,6 +17,8 @@ class MainActivity : AppCompatActivity() {
     private lateinit var logoutButton: Button
     private lateinit var customscreenButton: Button
     val weUser = WebEngage.get().user()
+    var weAnalytics = WebEngage.get().analytics()
+
     val prefs: SharedPrefsManager = SharedPrefsManager.get()
 
 
@@ -39,6 +36,7 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+
 
         val arr = Utils.getModelData()
         DataModel.getInstance().updateData(arr)
@@ -63,6 +61,7 @@ class MainActivity : AppCompatActivity() {
             showLogoutButton()
         }
         customscreenButton.setOnClickListener {
+            weAnalytics.track("testEvent")
             val intent = Intent(this, CustomScreen::class.java)
             startActivity(intent)
         }
@@ -73,5 +72,11 @@ class MainActivity : AppCompatActivity() {
             weUser.logout()
             showLogin()
         }
+    }
+
+    override fun onStart() {
+        super.onStart()
+        WebEngage.get().analytics().screenNavigated("main-screen")
+
     }
 }

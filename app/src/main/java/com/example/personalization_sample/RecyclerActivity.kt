@@ -57,7 +57,7 @@ class RecyclerActivity : AppCompatActivity() {
             val height = LayoutParams.MATCH_PARENT
             val width = LayoutParams.MATCH_PARENT
 
-            var newModelData = Model(i, modelData.screenName, modelData.eventName, modelData.isRecyclerView,modelData.viewRegistry)
+            var newModelData = Model(i, modelData.screenName, modelData.eventName, modelData.idName, modelData.idValue, modelData.isRecyclerView,modelData.viewRegistry)
 //            listSize=20, screenName=screen1, eventName=tex, isRecyclerView=true, viewRegistry=[ViewModel(position=1, height=0, width=0, propertyId=text_prop)
             viewModelList.add(newModelData)
         }

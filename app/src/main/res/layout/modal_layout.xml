@@ -8,11 +8,11 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal">
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Position:"
-        />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Position:" />
     <EditText
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -20,16 +20,25 @@
         android:text="1"
         android:hint="Position to Display"
         />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="is Custom view:" />
+        <CheckBox
+            android:layout_height="wrap_content"
+            android:layout_width="wrap_content"
+            android:id="@+id/isCustom" />
     </LinearLayout>
     <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal">
+
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Height:"
-            />
+            android:text="Height:" />
     <EditText
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -43,11 +52,12 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal">
+
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Width:"
-            />
+            android:fontFamily="casual"
+            android:text="Width:" />
     <EditText
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

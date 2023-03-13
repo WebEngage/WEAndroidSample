@@ -55,7 +55,7 @@ class DataModel {
     fun getData(): ArrayList<Model> {
         return registryMap
     }
-    fun setData(size: Int?, screen: String, event: String, isChecked: Boolean) {
+    fun setData(size: Int?, screen: String, event: String, idName: String, idValue: Int?, isChecked: Boolean) {
         listSize = size
         screenName = screen
         eventName = event
@@ -63,7 +63,7 @@ class DataModel {
 //        viewRegistry = viewRegistry
         val newViewRegistry = ArrayList<ViewModel>()
 
-        val model = Model(listSize, screenName, eventName, isRecyclerView, viewRegistry)
+        val model = Model(listSize, screenName, eventName, idName, idValue, isRecyclerView, viewRegistry)
         registryMap.add(model)
 
         Utils.storeModelData(registryMap)
@@ -87,12 +87,12 @@ class DataModel {
 
     }
 
-    fun setViewData(position: Int?, height: Int?, width: Int?, propertyId: String) {
+    fun setViewData(position: Int?, isCustomView: Boolean, height: Int?, width: Int?, propertyId: String) {
         viewPosition = position
         viewHeight= height
         viewWidth = width
         viewPropertyId = propertyId
-        val viewModel = ViewModel(viewPosition, viewHeight, viewWidth, viewPropertyId)
+        val viewModel = ViewModel(viewPosition, isCustomView, viewHeight, viewWidth, viewPropertyId)
         viewRegistry.add(viewModel)
     }
 

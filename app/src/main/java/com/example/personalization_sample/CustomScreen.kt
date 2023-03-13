@@ -20,6 +20,7 @@ import androidx.core.view.setMargins
 import androidx.recyclerview.widget.RecyclerView
 import com.example.personalization_sample.model.DataModel
 import com.example.personalization_sample.model.Model
+import com.webengage.sdk.android.WebEngage
 
 class CustomScreen : AppCompatActivity() {
     private lateinit var addScreenButton: Button
@@ -34,6 +35,7 @@ class CustomScreen : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_custom_screen)
+
 //        val inflater = LayoutInflater.from(applicationContext)
 //        val layout = inflater.inflate(R.layout.activity_custom_screen, null)
 //        val container = findViewById<LinearLayout>(R.id.cusomLinearLayout)
@@ -57,6 +59,11 @@ class CustomScreen : AppCompatActivity() {
         }
     }
 
+    override fun onStart() {
+        super.onStart()
+        WebEngage.get().analytics().screenNavigated("Custom-screen")
+    }
+
     fun createList() {
         val container = findViewById<LinearLayout>(R.id.cusomLinearLayout)
         container.removeAllViews()
@@ -70,7 +77,7 @@ class CustomScreen : AppCompatActivity() {
             LinearLayout.LayoutParams.WRAP_CONTENT,
             1f
         )
-        itemListLayout.setBackgroundResource(R.color.card)
+//        itemListLayout.setBackgroundResource(R.color.card)
 
         layoutParams.setMargins(0,50,0,50)
         itemListLayout.layoutParams = layoutParams
