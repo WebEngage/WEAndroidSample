@@ -5,6 +5,7 @@ import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
 import android.util.Log
+import android.util.TypedValue
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -21,7 +22,7 @@ import com.webengage.personalization.WEPersonalization
 import com.webengage.personalization.callbacks.WECampaignCallback
 import com.webengage.personalization.callbacks.WEPlaceholderCallback
 import com.webengage.personalization.data.WECampaignData
-import com.webengage.personalization.utils.TAG
+//import com.webengage.personalization.utils.TAG
 import com.webengage.sdk.android.Logger
 import com.webengage.sdk.android.WebEngage
 
@@ -34,50 +35,20 @@ class DynamicScreen : AppCompatActivity(), WECampaignCallback, WEPlaceholderCall
     var eventName: String = ""
     var viewRegistry: ArrayList<ViewModel> = ArrayList<ViewModel>()
     var isRecyclerView: Boolean = false
-    var isClickHandledByUser = false
+    var isClickHandledByUser: Boolean = false
+    var count = 0;
     private lateinit var autoClickHandle: Switch
+    private lateinit var trackEventText: TextView
+    private lateinit var trackRandom: Button
     private lateinit var navigationButton: Button
     private lateinit var inlineView: WEInlineView
+
+//    val trackEventText = itemView.findViewById<EditText>(R.id.trackRecyclerText)
+//    val trackRandom = itemView.findViewById<Button>(R.id.trackRecyclerButton)
     val dataModel = DataModel.getInstance()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_dynamic_screen)
-        val uri = intent.data
-        if(uri != null) {
-            val parameters = uri!!.pathSegments
-            val param = parameters[parameters.size - 1]
-        }
-        val ss = intent.getStringExtra("pageData")
-        if(!ss.isNullOrEmpty()) {
-            Log.d("WebEngage-Inline-App", "ss value " + ss)
-            modelData = Utils.convertStringToModel(ss)
-        }
-
-        Log.d("WebEngage-Inline-App", "intent data " + modelData)
-
-
-
-if(modelData != null) {
-    listSize = modelData?.listSize!!
-    screenName = modelData.screenName
-    eventName = modelData.eventName
-    viewRegistry = modelData.viewRegistry
-    isRecyclerView = modelData.isRecyclerView
-    navigationButton = findViewById(R.id.navigation)
-    autoClickHandle = findViewById<Switch>(R.id.autoClickHandle)
-    navigationButton.setOnClickListener {
-        turnOnModal()
-    }
-
-    autoClickHandle.setOnCheckedChangeListener { buttonView, isChecked ->
-        if(isChecked != isClickHandledByUser) {
-            isClickHandledByUser = isChecked
-        }
-    }
-}
-
-        attachScreen()
-
     }
 
     private fun checkAndNavigateDeepLink(param: String?, deepLink: String, hostName: String) {
@@ -95,14 +66,14 @@ if(modelData != null) {
                     isScreenFound = true
                 }
             }
-            Log.d(TAG, "screenData " + screenData)
+            Log.d("TAG", "screenData " + screenData)
             if (isScreenFound) {
                 val intent = Intent(Intent.ACTION_VIEW, Uri.parse(deepLink))
                 intent.setPackage("com.example.personalization_sample")
                 intent.putExtra("pageData", Utils.convertModelToString(screenData))
                 startActivity(intent)
             } else {
-                Toast.makeText(applicationContext, "Screen is not Available", Toast.LENGTH_SHORT)
+                Toast.makeText(applicationContext, "Sorry! This Link is not handled by user/ Invalid ScreenName to navigate", Toast.LENGTH_SHORT)
                     .show()
             }
         }
@@ -112,9 +83,53 @@ if(modelData != null) {
         super.onStart()
         WEPersonalization.Companion.get().registerWECampaignCallback(this);
 
-        if(!modelData.idName.isNullOrEmpty() && modelData.idValue != null) {
+        val uri = intent.data
+        if(uri != null) {
+            val parameters = uri!!.pathSegments
+            val param = parameters[parameters.size - 1]
+        }
+        val ss = intent.getStringExtra("pageData")
+        if(!ss.isNullOrEmpty()) {
+            Log.d("WebEngage-Inline-App", "ss value " + ss)
+            modelData = Utils.convertStringToModel(ss)
+        }
+
+        Log.d("WebEngage-Inline-App", "intent data " + modelData)
+
+        if(modelData != null) {
+            listSize = modelData?.listSize!!
+            screenName = modelData.screenName
+            eventName = modelData.eventName
+            viewRegistry = modelData.viewRegistry
+            isRecyclerView = modelData.isRecyclerView
+            navigationButton = findViewById(R.id.navigation)
+            trackRandom = findViewById(R.id.trackRandom)
+            trackEventText = findViewById(R.id.trackEventText)
+            autoClickHandle = findViewById<Switch>(R.id.autoClickHandle)
+            navigationButton.setOnClickListener {
+                turnOnModal()
+            }
+
+            trackRandom.setOnClickListener {
+                val eventToTrack = trackEventText.text.toString()
+                Logger.d("WebEngage", "tracking event - $eventToTrack")
+
+                WebEngage.get().analytics().track(eventToTrack)
+            }
+
+            autoClickHandle.setOnCheckedChangeListener { buttonView, isChecked ->
+                if(isChecked != isClickHandledByUser) {
+                    isClickHandledByUser = isChecked
+                }
+            }
+
+        }
+
+        Logger.d("WebEngage", "count - "+count);
+        if(!modelData.idName.isNullOrEmpty() && modelData.idValue != null && count == 0) {
             val screenData: MutableMap<String, Any> = HashMap()
             screenData[modelData.idName] = modelData.idValue!!
+            count += 1
             WebEngage.get().analytics().screenNavigated(screenName,screenData )
         } else {
             WebEngage.get().analytics().screenNavigated(screenName)
@@ -122,6 +137,8 @@ if(modelData != null) {
         if(!eventName.isNullOrEmpty()) {
             WebEngage.get().analytics().track(eventName)
         }
+        attachScreen()
+
     }
 
     override fun onStop() {
@@ -170,7 +187,7 @@ if(modelData != null) {
                         )
                     itemListLayout.addView(customScreenView)
                     addButtonsView(itemListLayout)
-
+                    Log.d("WebEngage-Inline-App", "Register WEPlaceHolder for " + propertyId)
                     WEPersonalization.Companion.get().registerWEPlaceholderCallback(propertyId, this)
 
                 } else {
@@ -340,7 +357,7 @@ if(modelData != null) {
                     ""
                 }
 //        val screenName = deepLinkData[3]
-            Log.d(TAG, "deepLinkData " + deepLinkData)
+            Log.d("TAG", "deepLinkData " + deepLinkData)
 
             val hostName = deepLinkData[2]
 //        val hostName = if (deepLinkData.size > 2) { deepLinkData[2] } else { "" }
@@ -374,7 +391,7 @@ if(modelData != null) {
         val container = findViewById<LinearLayout>(R.id.dynamicScreenLayout)
         val scrollContainer = container.findViewWithTag<ScrollView>("scrollTag")
         val customView = scrollContainer.findViewWithTag<LinearLayout>("viewItemList")
-        Logger.d("AKC", "getting property "+propertyReceived)
+        Logger.d("WebEngage", "getting property "+propertyReceived)
 
         val impressionButton = scrollContainer.findViewWithTag<Button>("impressionTag")
         val clickButton = scrollContainer.findViewWithTag<Button>("clickTag")
@@ -383,14 +400,40 @@ if(modelData != null) {
         customTextView?.text = data.toString()
 
         impressionButton.setOnClickListener {
-            Logger.d("AKC", "Listener increased in onData")
+            Logger.d("WebEngage", "Listener increased in onData")
             data.trackImpression(null)
         }
         clickButton.setOnClickListener {
-            Logger.d("AKC", "Click increased in onData")
+            Logger.d("WebEngage", "Click increased in onData")
             data.trackClick(null)
         }
     }
+
+    fun renderError(campaignId: String?, targetViewId: String, errorString: String) {
+        val propertyReceived = targetViewId + "customViewer"
+        val container = findViewById<LinearLayout>(R.id.dynamicScreenLayout)
+        val scrollContainer = container.findViewWithTag<ScrollView>("scrollTag")
+        val customView = scrollContainer.findViewWithTag<LinearLayout>("viewItemList")
+        Logger.d("WebEngage", "Exception occured - "+propertyReceived)
+
+        val impressionButton = scrollContainer.findViewWithTag<Button>("impressionTag")
+        val clickButton = scrollContainer.findViewWithTag<Button>("clickTag")
+
+        val customTextView = customView.findViewWithTag<TextView>(propertyReceived)
+        customTextView?.text = "Exception for $targetViewId \n campaignId - $campaignId  \n  Exception - $errorString"
+
+        customTextView.setTextSize(TypedValue.COMPLEX_UNIT_PX, 60.toFloat())
+
+        impressionButton.setOnClickListener {
+            Toast.makeText(applicationContext, "Not Valid when exception occuerd ", Toast.LENGTH_SHORT)
+                .show()
+        }
+        clickButton.setOnClickListener {
+            Toast.makeText(applicationContext, "Not Valid when exception occuerd ", Toast.LENGTH_SHORT)
+                .show()
+        }
+    }
+
 
     override fun onPlaceholderException(
         campaignId: String?,
@@ -399,7 +442,7 @@ if(modelData != null) {
     ) {
 //        Log.d(TAG_VIEW, "onPlaceholderException inside: " + targetViewId)
         Log.d(TAG_VIEW, "onPlaceholderException for: " + targetViewId + " | Errro - "+error)
-
+        renderError(campaignId, targetViewId, error.toString())
     }
 
     override fun onRendered(data: WECampaignData) {

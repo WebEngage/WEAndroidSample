@@ -4,5 +4,28 @@
     android:layout_height="wrap_content"
     android:id="@+id/recyclerItemLayout"
     android:orientation="vertical">
+<!--    <LinearLayout-->
+<!--        android:id="@+id/eventLayout"-->
+<!--        android:layout_width="wrap_content"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:orientation="horizontal"-->
+<!--        >-->
+
+<!--        <EditText-->
+<!--            android:layout_width="wrap_content"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:id="@+id/trackRecyclerText"-->
+<!--            android:hint="Enter event to track"-->
+<!--            android:tag="trackText"-->
+<!--            />-->
+
+<!--        <Button-->
+<!--            android:id="@+id/trackRecyclerButton"-->
+<!--            android:layout_width="wrap_content"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:layout_marginLeft="120dp"-->
+<!--            android:tag="trackButton"-->
+<!--            android:text="Track Event" />-->
+<!--    </LinearLayout>-->
 
 </LinearLayout>

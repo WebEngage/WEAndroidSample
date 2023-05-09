@@ -61,7 +61,6 @@ class MainActivity : AppCompatActivity() {
             showLogoutButton()
         }
         customscreenButton.setOnClickListener {
-            weAnalytics.track("testEvent")
             val intent = Intent(this, CustomScreen::class.java)
             startActivity(intent)
         }

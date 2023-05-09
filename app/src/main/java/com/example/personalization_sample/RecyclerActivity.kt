@@ -9,6 +9,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.widget.Button
 import android.widget.EditText
+import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -16,6 +17,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.personalization_sample.model.DataModel
 import com.example.personalization_sample.model.Model
 import com.example.personalization_sample.model.ViewModel
+import com.webengage.sdk.android.Logger
 import com.webengage.sdk.android.WebEngage
 
 class RecyclerActivity : AppCompatActivity() {
@@ -26,6 +28,8 @@ class RecyclerActivity : AppCompatActivity() {
     var eventName: String = ""
     var viewRegistry: ArrayList<ViewModel> = ArrayList<ViewModel>()
     val dataModel = DataModel.getInstance()
+    private lateinit var trackEventText: TextView
+    private lateinit var trackRandom: Button
     private lateinit var navigationButton: Button
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -40,14 +44,22 @@ class RecyclerActivity : AppCompatActivity() {
         eventName = modelData.eventName
         viewRegistry = modelData.viewRegistry
         WebEngage.get().analytics().screenNavigated(screenName)
-        if(!eventName.isNullOrEmpty()) {
+        if (!eventName.isNullOrEmpty()) {
             WebEngage.get().analytics().track(eventName)
         }
 
         navigationButton = findViewById(R.id.navigation)
+        trackEventText = findViewById<EditText>(R.id.trackRecyclerText)
+        trackRandom = findViewById<Button>(R.id.trackRecyclerButton)
 
         navigationButton.setOnClickListener {
             turnOnModal()
+        }
+
+        trackRandom.setOnClickListener {
+            val eventToTrack = trackEventText.text.toString()
+            Logger.d("WebEngage", "tracking event - $eventToTrack")
+            WebEngage.get().analytics().track(eventToTrack)
         }
 
         Log.d("WEP", "Recycler: intent data " + modelData)
@@ -57,12 +69,19 @@ class RecyclerActivity : AppCompatActivity() {
             val height = LayoutParams.MATCH_PARENT
             val width = LayoutParams.MATCH_PARENT
 
-            var newModelData = Model(i, modelData.screenName, modelData.eventName, modelData.idName, modelData.idValue, modelData.isRecyclerView,modelData.viewRegistry)
+            var newModelData = Model(
+                i,
+                modelData.screenName,
+                modelData.eventName,
+                modelData.idName,
+                modelData.idValue,
+                modelData.isRecyclerView,
+                modelData.viewRegistry
+            )
 //            listSize=20, screenName=screen1, eventName=tex, isRecyclerView=true, viewRegistry=[ViewModel(position=1, height=0, width=0, propertyId=text_prop)
             viewModelList.add(newModelData)
         }
         Log.d("WEP", "viewModelList " + viewModelList)
-
 
 
         val adapter = ViewModelAdapter(viewModelList)
@@ -70,6 +89,7 @@ class RecyclerActivity : AppCompatActivity() {
         recyclerView.layoutManager = LinearLayoutManager(this)
 
     }
+
     fun turnOnModal() {
         val dialogView = LayoutInflater.from(this).inflate(R.layout.modal_navigation, null)
         val builder = AlertDialog.Builder(this).create()
@@ -89,7 +109,6 @@ class RecyclerActivity : AppCompatActivity() {
         }
 
 
-
     }
 
     fun navigateToScreen(screenName: String, builder: AlertDialog) {
@@ -97,7 +116,7 @@ class RecyclerActivity : AppCompatActivity() {
         var isScreenFound = false
         for (entry in list) {
             if (entry.screenName.equals(screenName)) {
-                if(entry.isRecyclerView) {
+                if (entry.isRecyclerView) {
                     val intent = Intent(this, RecyclerActivity::class.java)
                     intent.putExtra("pageData", Utils.convertModelToString(entry))
                     startActivity(intent)
@@ -110,8 +129,8 @@ class RecyclerActivity : AppCompatActivity() {
                 builder.dismiss()
             }
         }
-        if(!isScreenFound) {
-            Toast.makeText(this,"Screen Not Found Enter valid screen", Toast.LENGTH_SHORT).show()
+        if (!isScreenFound) {
+            Toast.makeText(this, "Screen Not Found Enter valid screen", Toast.LENGTH_SHORT).show()
         }
 
     }
