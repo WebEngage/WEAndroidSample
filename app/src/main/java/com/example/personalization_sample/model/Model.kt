@@ -10,15 +10,4 @@ data class Model (
     val idValue: Int? = null,
     val isRecyclerView: Boolean = false,
     val viewRegistry: ArrayList<ViewModel>
-//    val viewRegistry: HashMap<String, ArrayList<ViewModel>>
-//    kotlin.collections.hashMapOf<String, ArrayList<ViewModel>>()
-) {
-}
-
-//data class WEGInline(
-//    val id: Int,
-//    val screenName: String,
-//    val propertyID: String
-//) {
-//    var weCampaignData: WECampaignData? = null
-//}
+)

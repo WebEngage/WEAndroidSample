@@ -52,7 +52,7 @@
             android:name=".Inline.ScreenDetails"
             android:exported="false" />
         <activity
-            android:name=".Inline.CustomScreen"
+            android:name=".Inline.ListScreenActivity"
             android:exported="false" />
 
         <meta-data

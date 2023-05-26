@@ -18,7 +18,7 @@ object Constants {
 
     // Log keys
     const val DEBUG_LOGGING = "debug-log"
-    const val WEBENGAGE_TAG = "WebEngage"
+    const val TAG = "WebEngage-Sample-App"
     const val WEBENGAGE_DEBUG_TAG = "webengage"
 
     // Log types

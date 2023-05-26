@@ -20,7 +20,7 @@ class MainApplication: Application() {
         super.onCreate()
         context = applicationContext
         val webEngageConfig = WebEngageConfig.Builder()
-            .setWebEngageKey("~aa131d2c")// 311c5274 //47b66161
+            .setWebEngageKey("aa131d2c")// 311c5274 //47b66161
             .setDebugMode(true) // only in development mode
             .setEventReportingStrategy(ReportingStrategy.FORCE_SYNC)
             .build()

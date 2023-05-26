@@ -10,7 +10,7 @@ import com.example.personalization_sample.R
 import com.example.personalization_sample.model.DataModel
 
 class ScreenDetails : AppCompatActivity() {
-    val dataModel = DataModel.getInstance()
+    private val dataModel = DataModel.getInstance()
     var isCheked: Boolean = false
 
     private lateinit var sizeEdit: EditText
@@ -39,16 +39,12 @@ class ScreenDetails : AppCompatActivity() {
         checkBox = findViewById(R.id.checkBox)
         idName = findViewById(R.id.idName)
         idVal = findViewById(R.id.idValue)
-
-
         addDataButton.setOnClickListener {
             addViewData()
         }
-
         checkBox.setOnCheckedChangeListener { _, isChecked ->
             isCheked = isChecked
         }
-
         saveButton.setOnClickListener {
             val size = sizeEdit.text.toString().toIntOrNull()
             val screenName = screenEdit.text.toString()
@@ -71,7 +67,7 @@ class ScreenDetails : AppCompatActivity() {
         }
     }
 
-    fun addViewData() {
+    private fun addViewData() {
         val dialogView = LayoutInflater.from(this).inflate(R.layout.modal_layout, null)
         val builder = AlertDialog.Builder(this).create()
         showDailog(dialogView, builder)
@@ -92,18 +88,16 @@ class ScreenDetails : AppCompatActivity() {
         }
     }
 
-    fun registerView() {
-
+    private fun registerView() {
         val positionView: Int? = position.text.toString().toIntOrNull()
         val heightView: Int? = height.text.toString().toIntOrNull()
         val widthView: Int? = width.text.toString().toIntOrNull()
         val propertyIdView: String = propertyId.text.toString()
-//        boolean isChecked = ((CheckBox) findViewById(R.id.checkBox1)).isChecked()
         val isCustomChecked: Boolean = isCustomView.isChecked
         dataModel.setViewData(positionView, isCustomChecked, heightView, widthView, propertyIdView)
     }
 
-    fun showDailog (dialogView: View, builder: AlertDialog) {
+    private fun showDailog (dialogView: View, builder: AlertDialog) {
         builder.setView(dialogView)
         builder.setTitle("Add View Data")
         builder.show()
@@ -113,7 +107,7 @@ class ScreenDetails : AppCompatActivity() {
         createList()
     }
 
-    fun createList() {
+    private fun createList() {
         val container = findViewById<LinearLayout>(R.id.screenList)
         container.removeAllViews()
 
@@ -168,13 +162,13 @@ class ScreenDetails : AppCompatActivity() {
             itemListLayout.addView(itemButtonLayout)
         }
 
-// Add the horizontal LinearLayout to the parent layout inside a ScrollView
+        // Add the horizontal LinearLayout to the parent layout inside a ScrollView
         val scrollView = ScrollView(this)
         scrollView.layoutParams = LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT)
         scrollView.addView(itemListLayout)
         container.addView(scrollView)
     }
-    fun deleteViewEntry(propertyId: String) {
+    private fun deleteViewEntry(propertyId: String) {
         dataModel.removeViewEntry(propertyId)
         createList()
     }

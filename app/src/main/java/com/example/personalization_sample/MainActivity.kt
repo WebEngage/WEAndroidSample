@@ -12,7 +12,7 @@ import android.widget.EditText
 import android.widget.TextView
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
-import com.example.personalization_sample.Inline.InlineActivity
+import com.example.personalization_sample.Inline.ListScreenActivity
 import com.example.personalization_sample.Utils.Constants
 import com.example.personalization_sample.Utils.SharedPrefsManager
 import com.example.personalization_sample.Utils.Utils
@@ -45,7 +45,7 @@ class MainActivity : AppCompatActivity() {
         // Inline
         mInlineButton = findViewById(R.id.personalizationButton)
         mInlineButton.setOnClickListener {
-            val intent = Intent(this, InlineActivity::class.java)
+            val intent = Intent(this, ListScreenActivity::class.java)
             startActivity(intent)
         }
     }

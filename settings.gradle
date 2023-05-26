@@ -12,5 +12,5 @@ dependencyResolutionManagement {
         mavenCentral()
     }
 }
-rootProject.name = "Personalization-sample"
+rootProject.name = "WESampleApp"
 include ':app'

@@ -1,10 +1,10 @@
 package com.example.personalization_sample.model
 
-import android.util.Log
+import com.example.personalization_sample.Utils.Constants
 import com.example.personalization_sample.Utils.Utils
+import com.webengage.sdk.android.Logger
 
 class DataModel {
-//    val listSize: int
     private var listSize: Int? = 0
     private var screenName: String = ""
     private var eventName: String = ""
@@ -14,9 +14,7 @@ class DataModel {
     private var viewHeight: Int? = 0
     private var viewWidth: Int? = 0
     private var viewPropertyId: String = ""
-//    model: Model
-//    private var registryMap: HashMap<String, Model> = hashMapOf()
-    val registryMap = ArrayList<Model>()
+    private val registryMap = ArrayList<Model>()
     var viewRegistry = ArrayList<ViewModel>()
 
     companion object {
@@ -29,25 +27,6 @@ class DataModel {
             }
         }
     }
-
-
-//    init {
-//        listSize = cardView ?: CardView(context)
-//        cardView = mView as CardView
-//        cardView!!.visibility = View.VISIBLE
-//    }
-    fun addData() {}
-    fun saveData() {}
-
-    fun getListSize(): Int? {
-        return listSize
-    }
-    fun getScreenName(): String {
-        return screenName
-    }
-    fun getEventName(): String {
-        return eventName
-    }
     fun getData(): ArrayList<Model> {
         return registryMap
     }
@@ -56,7 +35,6 @@ class DataModel {
         screenName = screen
         eventName = event
         isRecyclerView = isChecked
-//        viewRegistry = viewRegistry
         val newViewRegistry = ArrayList<ViewModel>()
 
         val model = Model(listSize, screenName, eventName, idName, idValue, isRecyclerView, viewRegistry)
@@ -68,11 +46,10 @@ class DataModel {
     }
     fun removeScreenEntry(screenName: String) {
         var indexToRemove: Int = -1
-//        removeEntry
+        //  removeEntry
         for ((index,entry) in registryMap.withIndex()) {
             if(entry.screenName.equals(screenName)) {
-                Log.d("WebEngage-Inline-App", "Removing index from - "+index)
-//                registryMap.removeAt(index)
+                Logger.d(Constants.TAG, "Removing index from - $index")
                 indexToRemove = index
             }
         }
@@ -99,22 +76,20 @@ class DataModel {
     fun updateData(modelList: ArrayList<Model>) {
         registryMap.clear()
         registryMap.addAll(modelList)
-        Log.d("AKA", "Updated Data")
+        Logger.d(Constants.TAG, "Updated Data")
     }
 
     fun removeViewEntry(propertyId: String) {
         var indexToRemove: Int = -1
-//        removeEntry
+        // removeEntry
         for ((index,entry) in viewRegistry.withIndex()) {
             if(entry.propertyId.equals(propertyId)) {
-                Log.d("WebEngage-Inline-App", "Removing index from - "+index)
-//                registryMap.removeAt(index)
+                Logger.d(Constants.TAG, "Removing index from - $index")
                 indexToRemove = index
             }
         }
         if (indexToRemove != -1) {
             viewRegistry.removeAt(indexToRemove)
-//            Utils.storeModelData(viewRegistry )
         }
 
     }
