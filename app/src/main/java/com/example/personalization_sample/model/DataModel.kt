@@ -1,11 +1,7 @@
 package com.example.personalization_sample.model
 
 import android.util.Log
-import android.view.Display.Mode
-import android.view.View
-import android.widget.Button
-import androidx.cardview.widget.CardView
-import com.example.personalization_sample.Utils
+import com.example.personalization_sample.Utils.Utils
 
 class DataModel {
 //    val listSize: int

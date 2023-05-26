@@ -19,9 +19,8 @@ class MainApplication: Application() {
     override fun onCreate() {
         super.onCreate()
         context = applicationContext
-        Log.d("WEH", "Main Application called");
         val webEngageConfig = WebEngageConfig.Builder()
-            .setWebEngageKey("~47b66161")// 311c5274 //47b66161
+            .setWebEngageKey("~aa131d2c")// 311c5274 //47b66161
             .setDebugMode(true) // only in development mode
             .setEventReportingStrategy(ReportingStrategy.FORCE_SYNC)
             .build()

@@ -31,10 +31,10 @@
             android:name=".Inline.InlineActivity"
             android:exported="false" />
         <activity
-            android:name=".RecyclerActivity"
+            android:name=".Inline.RecyclerActivity"
             android:exported="false" />
         <activity
-            android:name=".DynamicScreen"
+            android:name=".Inline.DynamicScreen"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
@@ -49,10 +49,10 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".ScreenDetails"
+            android:name=".Inline.ScreenDetails"
             android:exported="false" />
         <activity
-            android:name=".CustomScreen"
+            android:name=".Inline.CustomScreen"
             android:exported="false" />
 
         <meta-data

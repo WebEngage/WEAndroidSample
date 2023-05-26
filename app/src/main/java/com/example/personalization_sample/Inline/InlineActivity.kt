@@ -6,10 +6,9 @@ import android.os.Bundle
 import android.widget.Button
 import android.widget.EditText
 import android.widget.RelativeLayout
-import com.example.personalization_sample.CustomScreen
 import com.example.personalization_sample.R
-import com.example.personalization_sample.SharedPrefsManager
-import com.example.personalization_sample.Utils
+import com.example.personalization_sample.Utils.SharedPrefsManager
+import com.example.personalization_sample.Utils.Utils
 import com.example.personalization_sample.model.DataModel
 import com.webengage.sdk.android.WebEngage
 

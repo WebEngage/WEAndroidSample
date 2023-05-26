@@ -20,12 +20,6 @@
         android:text="@string/username_hint"
         android:textIsSelectable="true" />
 
-    <!--<TextView-->
-    <!--android:id="@+id/editProfileTextView"-->
-    <!--style="@style/TextButtonStyle"-->
-    <!--android:text="@string/edit_profile"-->
-    <!--android:layout_marginBottom="@dimen/margin_large_xxx" />-->
-
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
