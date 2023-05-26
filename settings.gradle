@@ -13,4 +13,4 @@ dependencyResolutionManagement {
     }
 }
 rootProject.name = "Personalization-sample"
-include ':app', ':we-personalization', ':android-sdk'
+include ':app'
