@@ -1,17 +1,16 @@
-package com.example.personalization_sample.Inline
+package com.webengage.sample.inline
 
 import android.app.ActionBar.LayoutParams
 import android.content.Context
-import android.util.Log
 import android.util.TypedValue
 import android.view.View
 import android.widget.*
 import androidx.recyclerview.widget.RecyclerView
-import com.example.personalization_sample.R
-import com.example.personalization_sample.Utils.Constants
-import com.example.personalization_sample.Utils.Utils
-import com.example.personalization_sample.model.Model
-import com.example.personalization_sample.model.ViewModel
+import com.webengage.sample.R
+import com.webengage.sample.Utils.Constants
+import com.webengage.sample.Utils.Utils
+import com.webengage.sample.model.Model
+import com.webengage.sample.model.ViewModel
 import com.webengage.personalization.WEInlineView
 import com.webengage.personalization.WEPersonalization
 import com.webengage.personalization.callbacks.WEPlaceholderCallback
@@ -125,7 +124,7 @@ class ViewModelViewHolder(itemView: View, context: Context) : RecyclerView.ViewH
         }
     }
 
-    private fun addCustomTextView(entry: ViewModel,mainLayout: LinearLayout) {
+    private fun addCustomTextView(entry: ViewModel, mainLayout: LinearLayout) {
         val customScreenView = TextView(viewModelContext)
         val entry1 = mapOf(entry.propertyId to customString)
         customStringData.add(entry1)

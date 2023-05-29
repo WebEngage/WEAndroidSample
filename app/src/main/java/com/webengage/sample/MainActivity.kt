@@ -1,4 +1,4 @@
-package com.example.personalization_sample
+package com.webengage.sample
 
 import android.content.Intent
 import android.os.Bundle
@@ -12,10 +12,11 @@ import android.widget.EditText
 import android.widget.TextView
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
-import com.example.personalization_sample.Inline.ListScreenActivity
-import com.example.personalization_sample.Utils.Constants
-import com.example.personalization_sample.Utils.SharedPrefsManager
-import com.example.personalization_sample.Utils.Utils
+import com.webengage.sample.R
+import com.webengage.sample.inline.ListScreenActivity
+import com.webengage.sample.Utils.Constants
+import com.webengage.sample.Utils.SharedPrefsManager
+import com.webengage.sample.Utils.Utils
 import com.webengage.sdk.android.WebEngage
 
 

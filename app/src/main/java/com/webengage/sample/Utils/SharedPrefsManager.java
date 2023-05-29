@@ -1,4 +1,4 @@
-package com.example.personalization_sample.Utils;
+package com.webengage.sample.Utils;
 
 
 import android.content.Context;
@@ -7,7 +7,7 @@ import android.content.SharedPreferences.Editor;
 import android.util.Log;
 //import com.webengage.test.MyApplication;
 //import com.webengage.test.Log;
-import com.example.personalization_sample.MainApplication;
+import com.webengage.sample.MainApplication;
 
 import java.util.Set;
 

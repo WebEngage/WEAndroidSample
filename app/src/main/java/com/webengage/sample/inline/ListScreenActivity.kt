@@ -1,4 +1,4 @@
-package com.example.personalization_sample.Inline
+package com.webengage.sample.inline
 
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
@@ -9,10 +9,10 @@ import android.widget.Button
 import android.widget.LinearLayout
 import android.widget.ScrollView
 import android.widget.TextView
-import com.example.personalization_sample.R
-import com.example.personalization_sample.Utils.Utils
-import com.example.personalization_sample.model.DataModel
-import com.example.personalization_sample.model.Model
+import com.webengage.sample.R
+import com.webengage.sample.Utils.Utils
+import com.webengage.sample.model.DataModel
+import com.webengage.sample.model.Model
 import com.webengage.sdk.android.WebEngage
 
 class ListScreenActivity : AppCompatActivity() {

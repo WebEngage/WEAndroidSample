@@ -1,4 +1,4 @@
-package com.example.personalization_sample.Utils
+package com.webengage.sample.Utils
 
 
 object Constants {

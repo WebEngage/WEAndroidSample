@@ -1,4 +1,4 @@
-package com.example.personalization_sample
+package com.webengage.sample
 
 import org.junit.Test
 

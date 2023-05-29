@@ -1,10 +1,8 @@
-package com.example.personalization_sample.Inline
+package com.webengage.sample.inline
 
-import android.app.ActionBar.LayoutParams
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.widget.Button
 import android.widget.EditText
@@ -13,12 +11,12 @@ import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.example.personalization_sample.R
-import com.example.personalization_sample.Utils.Constants
-import com.example.personalization_sample.Utils.Utils
-import com.example.personalization_sample.model.DataModel
-import com.example.personalization_sample.model.Model
-import com.example.personalization_sample.model.ViewModel
+import com.webengage.sample.R
+import com.webengage.sample.Utils.Constants
+import com.webengage.sample.Utils.Utils
+import com.webengage.sample.model.DataModel
+import com.webengage.sample.model.Model
+import com.webengage.sample.model.ViewModel
 import com.webengage.sdk.android.Logger
 import com.webengage.sdk.android.WebEngage
 

@@ -1,4 +1,4 @@
-package com.example.personalization_sample.Inline
+package com.webengage.sample.inline
 
 import android.app.ActionBar.LayoutParams
 import android.content.Intent
@@ -9,12 +9,12 @@ import android.view.LayoutInflater
 import android.widget.*
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
-import com.example.personalization_sample.R
-import com.example.personalization_sample.Utils.Constants
-import com.example.personalization_sample.Utils.Utils
-import com.example.personalization_sample.model.DataModel
-import com.example.personalization_sample.model.Model
-import com.example.personalization_sample.model.ViewModel
+import com.webengage.sample.R
+import com.webengage.sample.Utils.Constants
+import com.webengage.sample.Utils.Utils
+import com.webengage.sample.model.DataModel
+import com.webengage.sample.model.Model
+import com.webengage.sample.model.ViewModel
 import com.webengage.personalization.WEInlineView
 import com.webengage.personalization.WEPersonalization
 import com.webengage.personalization.callbacks.WECampaignCallback
@@ -62,7 +62,7 @@ class DynamicScreen : AppCompatActivity(), WECampaignCallback, WEPlaceholderCall
             Logger.d(Constants.TAG, "screenData $screenData")
             if (isScreenFound) {
                 val intent = Intent(Intent.ACTION_VIEW, Uri.parse(deepLink))
-                intent.setPackage("com.example.personalization_sample")
+                intent.setPackage("com.webengage.sample")
                 intent.putExtra("pageData", Utils.convertModelToString(screenData))
                 startActivity(intent)
             } else {

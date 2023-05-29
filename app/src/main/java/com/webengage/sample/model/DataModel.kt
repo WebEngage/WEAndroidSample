@@ -1,7 +1,7 @@
-package com.example.personalization_sample.model
+package com.webengage.sample.model
 
-import com.example.personalization_sample.Utils.Constants
-import com.example.personalization_sample.Utils.Utils
+import com.webengage.sample.Utils.Constants
+import com.webengage.sample.Utils.Utils
 import com.webengage.sdk.android.Logger
 
 class DataModel {

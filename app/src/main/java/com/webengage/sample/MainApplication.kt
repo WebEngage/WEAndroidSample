@@ -1,12 +1,14 @@
-package com.example.personalization_sample
+package com.webengage.sample
 
 import android.app.Application
 import android.content.Context
-import android.util.Log
+import com.google.firebase.messaging.FirebaseMessaging
 import com.webengage.personalization.WEPersonalization
+import com.webengage.sdk.android.WebEngage
 import com.webengage.sdk.android.WebEngageActivityLifeCycleCallbacks
 import com.webengage.sdk.android.WebEngageConfig
 import com.webengage.sdk.android.actions.database.ReportingStrategy
+
 
 class MainApplication: Application() {
     companion object {

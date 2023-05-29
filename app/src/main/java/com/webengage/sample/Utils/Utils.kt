@@ -1,7 +1,7 @@
-package com.example.personalization_sample.Utils
+package com.webengage.sample.Utils
 
-import com.example.personalization_sample.MainApplication
-import com.example.personalization_sample.model.Model
+import com.webengage.sample.MainApplication
+import com.webengage.sample.model.Model
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 

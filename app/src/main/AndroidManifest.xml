@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    package="com.example.personalization_sample">
+    package="com.webengage.sample">
 
     <queries>
         <package android:name="com.google.android.youtube" />
@@ -18,7 +18,7 @@
     </queries>
 
     <application
-        android:name=".MainApplication"
+        android:name="com.webengage.sample.MainApplication"
         android:allowBackup="false"
         android:dataExtractionRules="@xml/data_extraction_rules"
         android:fullBackupContent="@xml/backup_rules"
@@ -27,14 +27,18 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Personalizationsample"
         tools:targetApi="31">
+
+        <service android:exported="false"
+            android:name=".MyFirebaseMessagingService">
+            <intent-filter>
+                <action android:name="com.google.firebase.MESSAGING_EVENT"/>
+            </intent-filter>
+        </service>
         <activity
-            android:name=".Inline.InlineActivity"
+            android:name="com.webengage.sample.inline.RecyclerActivity"
             android:exported="false" />
         <activity
-            android:name=".Inline.RecyclerActivity"
-            android:exported="false" />
-        <activity
-            android:name=".Inline.DynamicScreen"
+            android:name="com.webengage.sample.inline.DynamicScreen"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
@@ -49,10 +53,10 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".Inline.ScreenDetails"
+            android:name="com.webengage.sample.inline.ScreenDetails"
             android:exported="false" />
         <activity
-            android:name=".Inline.ListScreenActivity"
+            android:name="com.webengage.sample.inline.ListScreenActivity"
             android:exported="false" />
 
         <meta-data
@@ -60,7 +64,7 @@
             android:value="us" />
 
         <activity
-            android:name=".MainActivity"
+            android:name="com.webengage.sample.MainActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

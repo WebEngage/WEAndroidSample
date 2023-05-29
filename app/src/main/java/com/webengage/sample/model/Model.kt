@@ -1,6 +1,4 @@
-package com.example.personalization_sample.model
-
-import android.view.View
+package com.webengage.sample.model
 
 data class Model (
     var listSize: Int? = 0,

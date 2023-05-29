@@ -1,4 +1,4 @@
-package com.example.personalization_sample.model
+package com.webengage.sample.model
 
 data class ViewModel (
     val position: Int? = 0,

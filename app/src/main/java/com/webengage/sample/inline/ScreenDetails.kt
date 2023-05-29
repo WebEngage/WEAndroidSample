@@ -1,4 +1,4 @@
-package com.example.personalization_sample.Inline
+package com.webengage.sample.inline
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -6,8 +6,8 @@ import android.view.View
 import android.widget.*
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
-import com.example.personalization_sample.R
-import com.example.personalization_sample.model.DataModel
+import com.webengage.sample.R
+import com.webengage.sample.model.DataModel
 
 class ScreenDetails : AppCompatActivity() {
     private val dataModel = DataModel.getInstance()
