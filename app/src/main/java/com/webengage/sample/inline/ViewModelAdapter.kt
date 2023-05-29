@@ -4,7 +4,7 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.webengage.sample.R
-import com.webengage.sample.model.Model
+import com.webengage.sample.inline.model.Model
 
 class ViewModelAdapter(private val viewModelList: List<Model>) :
     RecyclerView.Adapter<ViewModelViewHolder>() {

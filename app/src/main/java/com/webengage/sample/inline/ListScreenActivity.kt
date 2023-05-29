@@ -11,8 +11,8 @@ import android.widget.ScrollView
 import android.widget.TextView
 import com.webengage.sample.R
 import com.webengage.sample.Utils.Utils
-import com.webengage.sample.model.DataModel
-import com.webengage.sample.model.Model
+import com.webengage.sample.inline.model.DataModel
+import com.webengage.sample.inline.model.Model
 import com.webengage.sdk.android.WebEngage
 
 class ListScreenActivity : AppCompatActivity() {

@@ -1,4 +1,4 @@
-package com.webengage.sample.model
+package com.webengage.sample.inline.model
 
 import com.webengage.sample.Utils.Constants
 import com.webengage.sample.Utils.Utils

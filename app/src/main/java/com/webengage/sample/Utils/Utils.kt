@@ -1,7 +1,7 @@
 package com.webengage.sample.Utils
 
 import com.webengage.sample.MainApplication
-import com.webengage.sample.model.Model
+import com.webengage.sample.inline.model.Model
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 

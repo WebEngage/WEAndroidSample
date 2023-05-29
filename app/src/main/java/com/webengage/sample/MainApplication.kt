@@ -13,7 +13,6 @@ import com.webengage.sdk.android.actions.database.ReportingStrategy
 class MainApplication: Application() {
     companion object {
         private lateinit var context: Context
-
         fun getContext(): Context {
             return context
         }

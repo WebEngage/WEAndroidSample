@@ -12,9 +12,9 @@ import androidx.appcompat.app.AppCompatActivity
 import com.webengage.sample.R
 import com.webengage.sample.Utils.Constants
 import com.webengage.sample.Utils.Utils
-import com.webengage.sample.model.DataModel
-import com.webengage.sample.model.Model
-import com.webengage.sample.model.ViewModel
+import com.webengage.sample.inline.model.DataModel
+import com.webengage.sample.inline.model.Model
+import com.webengage.sample.inline.model.ViewModel
 import com.webengage.personalization.WEInlineView
 import com.webengage.personalization.WEPersonalization
 import com.webengage.personalization.callbacks.WECampaignCallback
@@ -37,7 +37,6 @@ class DynamicScreen : AppCompatActivity(), WECampaignCallback, WEPlaceholderCall
     private lateinit var trackRandom: Button
     private lateinit var navigationButton: Button
     private lateinit var inlineView: WEInlineView
-
     private val dataModel = DataModel.getInstance()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

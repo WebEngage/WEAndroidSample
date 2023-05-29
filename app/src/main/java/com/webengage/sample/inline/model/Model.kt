@@ -1,4 +1,5 @@
-package com.webengage.sample.model
+package com.webengage.sample.inline.model
+
 
 data class Model (
     var listSize: Int? = 0,

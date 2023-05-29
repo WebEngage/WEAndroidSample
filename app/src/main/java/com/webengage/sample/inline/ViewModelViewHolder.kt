@@ -9,8 +9,8 @@ import androidx.recyclerview.widget.RecyclerView
 import com.webengage.sample.R
 import com.webengage.sample.Utils.Constants
 import com.webengage.sample.Utils.Utils
-import com.webengage.sample.model.Model
-import com.webengage.sample.model.ViewModel
+import com.webengage.sample.inline.model.Model
+import com.webengage.sample.inline.model.ViewModel
 import com.webengage.personalization.WEInlineView
 import com.webengage.personalization.WEPersonalization
 import com.webengage.personalization.callbacks.WEPlaceholderCallback

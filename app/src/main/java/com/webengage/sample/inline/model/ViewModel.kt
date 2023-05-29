@@ -1,4 +1,4 @@
-package com.webengage.sample.model
+package com.webengage.sample.inline.model
 
 data class ViewModel (
     val position: Int? = 0,

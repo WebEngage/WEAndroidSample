@@ -7,7 +7,7 @@ import android.widget.*
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import com.webengage.sample.R
-import com.webengage.sample.model.DataModel
+import com.webengage.sample.inline.model.DataModel
 
 class ScreenDetails : AppCompatActivity() {
     private val dataModel = DataModel.getInstance()
