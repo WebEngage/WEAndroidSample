@@ -1,6 +1,5 @@
 package com.webengage.sample
 
-import android.content.Intent
 import android.os.Bundle
 import android.os.PersistableBundle
 import android.view.LayoutInflater
@@ -12,8 +11,6 @@ import android.widget.EditText
 import android.widget.TextView
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
-import com.webengage.sample.R
-import com.webengage.sample.inline.ListScreenActivity
 import com.webengage.sample.Utils.Constants
 import com.webengage.sample.Utils.SharedPrefsManager
 import com.webengage.sample.Utils.Utils
@@ -22,6 +19,7 @@ import com.webengage.sdk.android.WebEngage
 
 class MainActivity : AppCompatActivity() {
     private lateinit var mInlineButton: Button
+    private lateinit var mUserProfileButton: Button
     private lateinit var mLoginMenuItem: MenuItem
     private lateinit var mLogoutMenuItem: MenuItem
     private lateinit var mUsernameTextView: TextView
@@ -43,11 +41,17 @@ class MainActivity : AppCompatActivity() {
     private fun initViews() {
         // UserGreeting TextView
         mUsernameTextView = findViewById(R.id.usernameTextView)
+
         // Inline
         mInlineButton = findViewById(R.id.personalizationButton)
         mInlineButton.setOnClickListener {
-            val intent = Intent(this, ListScreenActivity::class.java)
-            startActivity(intent)
+            startActivity(Utils.getInlineActivityIntent(this))
+        }
+
+
+        mUserProfileButton = findViewById(R.id.profile_button)
+        mUserProfileButton.setOnClickListener{
+            startActivity(Utils.getUserActivityIntent(this))
         }
     }
 

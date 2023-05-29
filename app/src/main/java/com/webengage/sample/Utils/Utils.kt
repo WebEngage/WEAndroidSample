@@ -1,9 +1,17 @@
 package com.webengage.sample.Utils
 
-import com.webengage.sample.MainApplication
-import com.webengage.sample.inline.model.ScreenModel
+import android.content.Context
+import android.content.Intent
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
+import com.webengage.sample.MainApplication
+import com.webengage.sample.inline.ListScreenActivity
+import com.webengage.sample.inline.model.ScreenModel
+import com.webengage.sample.user.UserActivity
+import java.text.ParseException
+import java.text.SimpleDateFormat
+import java.util.Date
+
 
 class Utils {
 
@@ -53,6 +61,26 @@ class Utils {
 
         fun checkIsUserLoggedIn(): Boolean {
             return SharedPrefsManager.get().getString(Constants.CUID, "").isNotEmpty()
+        }
+
+        fun isDateValid(date: String): Boolean {
+
+            val sdf = SimpleDateFormat("yyyy-MM-dd")
+            sdf.isLenient = false
+            try {
+                val javaDate: Date = sdf.parse(date)
+            } catch (e: ParseException) {
+                return false
+            }
+            return true
+        }
+
+        fun getUserActivityIntent(context: Context):Intent{
+            return Intent(context, UserActivity::class.java)
+        }
+
+        fun getInlineActivityIntent(context: Context): Intent{
+            return Intent(context, ListScreenActivity::class.java)
         }
     }
 }

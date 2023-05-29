@@ -33,7 +33,7 @@
     <string name="skip_engage">Skip Engage</string>
     <string name="skip_login">Skip Login</string>
     <string name="logout_button">LOGOUT</string>
-    <string name="profile_button">PROFILE</string>
+    <string name="profile_button">User Profile</string>
     <string name="events_button">EVENTS</string>
     <string name="complex_events_button">COMPLEX EVENTS</string>
     <string name="push_button">PUSH</string>
@@ -87,6 +87,7 @@
     <string name="settings">Settings</string>
     <!--<string name="android_html_text"><![CDATA[<p style="text-align:right;" ><span style="color:#990000;" >Test </span> + 2 = Title long line right alligned next line</p>]]></string>-->
     <string name="android_html_text"><![CDATA[<p style="text-align:center;" ><span style="font-size:14pt;text-decoration:underline;" >center Test <span style="font-size:10pt;" >description</span> long line</span></p><p style="text-align:left;" ><span style="font-size:14pt;text-decoration:underline;" >left&nbsp;allign 😊 smiley</span></p><p style="text-align:right;" ><span style="font-size:14pt;text-decoration:underline;" >next line right&nbsp;</span></p>]]></string>
+    <string name="USER_ATTRIBUTE_DATE_ERROR">Invalid date format for birthdate. Please enter date in yyyy-MM-dd format.</string>
     <string-array name="mi_region_array">
         <item>Global</item>
         <item>Europe</item>
