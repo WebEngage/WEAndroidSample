@@ -13,7 +13,7 @@ import com.webengage.sample.R
 import com.webengage.sample.Utils.Constants
 import com.webengage.sample.Utils.Utils
 import com.webengage.sample.inline.model.DataModel
-import com.webengage.sample.inline.model.Model
+import com.webengage.sample.inline.model.ScreenModel
 import com.webengage.sample.inline.model.ViewModel
 import com.webengage.personalization.WEInlineView
 import com.webengage.personalization.WEPersonalization
@@ -24,7 +24,7 @@ import com.webengage.sdk.android.Logger
 import com.webengage.sdk.android.WebEngage
 
 class DynamicScreen : AppCompatActivity(), WECampaignCallback, WEPlaceholderCallback  {
-    private lateinit var modelData: Model
+    private lateinit var screenModelData: ScreenModel
     private var listSize: Int = 0
     private var screenName: String = ""
     private var eventName: String = ""
@@ -34,7 +34,7 @@ class DynamicScreen : AppCompatActivity(), WECampaignCallback, WEPlaceholderCall
     var count = 0;
     private lateinit var autoClickHandle: Switch
     private lateinit var trackEventText: TextView
-    private lateinit var trackRandom: Button
+    private lateinit var trackEvent: Button
     private lateinit var navigationButton: Button
     private lateinit var inlineView: WEInlineView
     private val dataModel = DataModel.getInstance()
@@ -43,6 +43,7 @@ class DynamicScreen : AppCompatActivity(), WECampaignCallback, WEPlaceholderCall
         setContentView(R.layout.activity_dynamic_screen)
     }
 
+    // Handling DeepLink
     private fun checkAndNavigateDeepLink(param: String?, deepLink: String, hostName: String) {
         var isScreenFound = false
         if(hostName == "www.youtube.com") {
@@ -50,10 +51,10 @@ class DynamicScreen : AppCompatActivity(), WECampaignCallback, WEPlaceholderCall
             intent.setPackage("com.google.android.youtube")
             startActivity(intent)
         } else {
-            val list = dataModel.getData()
-            var screenData: Model = Model(0, "", "", "",null, false, ArrayList<ViewModel>())
+            val list = dataModel.getScreenData()
+            var screenData: ScreenModel = ScreenModel(0, "", "", "",null, false, ArrayList<ViewModel>())
             for (entry in list) {
-                if (entry.screenName.equals(param)) {
+                if (entry.screenName == param) {
                     screenData = entry
                     isScreenFound = true
                 }
@@ -73,6 +74,7 @@ class DynamicScreen : AppCompatActivity(), WECampaignCallback, WEPlaceholderCall
 
     override fun onStart() {
         super.onStart()
+        // Register for Campaign Callbacks
         WEPersonalization.Companion.get().registerWECampaignCallback(this);
 
         val uri = intent.data
@@ -81,31 +83,34 @@ class DynamicScreen : AppCompatActivity(), WECampaignCallback, WEPlaceholderCall
             val param = parameters[parameters.size - 1]
             Logger.d(Constants.TAG, " Params - $param");
         }
+        // Gets screen data to render
         val ss = intent.getStringExtra("pageData")
         if(!ss.isNullOrEmpty()) {
-            modelData = Utils.convertStringToModel(ss)
+            screenModelData = Utils.convertStringToModel(ss)
         }
-        Logger.d(Constants.TAG, "intent data $modelData")
-        if(modelData != null) {
-            listSize = modelData?.listSize!!
-            screenName = modelData.screenName
-            eventName = modelData.eventName
-            viewRegistry = modelData.viewRegistry
-            isRecyclerView = modelData.isRecyclerView
+        Logger.d(Constants.TAG, "intent data $screenModelData")
+        if(screenModelData != null) {
+            listSize = screenModelData?.listSize!!
+            screenName = screenModelData.screenName
+            eventName = screenModelData.eventName
+            viewRegistry = screenModelData.viewRegistry
+            isRecyclerView = screenModelData.isRecyclerView
             navigationButton = findViewById(R.id.navigation)
-            trackRandom = findViewById(R.id.trackRandom)
+            trackEvent = findViewById(R.id.trackRandom)
             trackEventText = findViewById(R.id.trackEventText)
             autoClickHandle = findViewById<Switch>(R.id.autoClickHandle)
             navigationButton.setOnClickListener {
                 turnOnModal()
             }
 
-            trackRandom.setOnClickListener {
+            // Event Track
+            trackEvent.setOnClickListener {
                 val eventToTrack = trackEventText.text.toString()
                 Logger.d(Constants.TAG, "tracking event - $eventToTrack")
                 WebEngage.get().analytics().track(eventToTrack)
             }
 
+            // Handle DeepLink auto/Manual
             autoClickHandle.setOnCheckedChangeListener { buttonView, isChecked ->
                 if(isChecked != isClickHandledByUser) {
                     isClickHandledByUser = isChecked
@@ -113,9 +118,9 @@ class DynamicScreen : AppCompatActivity(), WECampaignCallback, WEPlaceholderCall
             }
         }
 
-        if(!modelData.idName.isNullOrEmpty() && modelData.idValue != null && count == 0) {
+        if(!screenModelData.idName.isNullOrEmpty() && screenModelData.idValue != null && count == 0) {
             val screenData: MutableMap<String, Any> = HashMap()
-            screenData[modelData.idName] = modelData.idValue!!
+            screenData[screenModelData.idName] = screenModelData.idValue!!
             count += 1
             WebEngage.get().analytics().screenNavigated(screenName,screenData )
         } else {
@@ -125,7 +130,6 @@ class DynamicScreen : AppCompatActivity(), WECampaignCallback, WEPlaceholderCall
             WebEngage.get().analytics().track(eventName)
         }
         attachScreen()
-
     }
 
     override fun onStop() {
@@ -133,9 +137,11 @@ class DynamicScreen : AppCompatActivity(), WECampaignCallback, WEPlaceholderCall
         WEPersonalization.Companion.get().unregisterWECampaignCallback(this);
     }
 
-    fun attachScreen() {
+    private fun attachScreen() {
+        // Remove Views if any views existing
         val container = findViewById<LinearLayout>(R.id.dynamicScreenLayout)
         container.removeAllViews()
+
         val itemListLayout = LinearLayout(this)
         itemListLayout.tag = "viewItemList"
         itemListLayout.orientation = LinearLayout.VERTICAL
@@ -208,15 +214,16 @@ class DynamicScreen : AppCompatActivity(), WECampaignCallback, WEPlaceholderCall
             scrollViewLayout.addView(itemListLayout)
             container.addView(scrollViewLayout)
 
+        // loads all the available inline properties available in the list of the screen
         for (propertyId in weInlineViewList) {
             val inView: WEInlineView = container.findViewWithTag(propertyId)
             if (inView != null) {
                 inView.load(propertyId, this)
             }
         }
-
     }
 
+    // Track and click buttons for Custom Inline
     private fun addButtonsView(itemListLayout: LinearLayout) {
         val layoutParams = LinearLayout.LayoutParams(
             LinearLayout.LayoutParams.WRAP_CONTENT,
@@ -246,6 +253,7 @@ class DynamicScreen : AppCompatActivity(), WECampaignCallback, WEPlaceholderCall
         }
     }
 
+    // opens modal with list of screens that can be navigated!
     private fun turnOnModal() {
         val dialogView = LayoutInflater.from(this).inflate(R.layout.modal_navigation, null)
         val builder = AlertDialog.Builder(this).create()
@@ -264,11 +272,12 @@ class DynamicScreen : AppCompatActivity(), WECampaignCallback, WEPlaceholderCall
         }
     }
 
+    // Navigates user to the next screen!
     private fun navigateToScreen(screenName: String, builder: AlertDialog) {
-        val list = dataModel.getData()
+        val list = dataModel.getScreenData()
         var isScreenFound = false
         for (entry in list) {
-            if (entry.screenName.equals(screenName)) {
+            if (entry.screenName == screenName) {
                 if(entry.isRecyclerView) {
                     val intent = Intent(this, RecyclerActivity::class.java)
                     intent.putExtra("pageData", Utils.convertModelToString(entry))
@@ -287,6 +296,7 @@ class DynamicScreen : AppCompatActivity(), WECampaignCallback, WEPlaceholderCall
         }
     }
 
+    // Checks if position item is inline(index) or regular view(-1)
     private fun checkIfInlineViewPosition(entry: Int): Int {
         if (!viewRegistry.isNullOrEmpty()) {
             for ((index, i) in viewRegistry.withIndex()) {
@@ -298,6 +308,7 @@ class DynamicScreen : AppCompatActivity(), WECampaignCallback, WEPlaceholderCall
         return -1
     }
 
+    // Checks if custom View
     private fun checkIfCustomInlineViewPosition(propertyReceived: String): Boolean {
         if (!viewRegistry.isNullOrEmpty()) {
             for ((index, i) in viewRegistry.withIndex()) {
@@ -351,6 +362,7 @@ class DynamicScreen : AppCompatActivity(), WECampaignCallback, WEPlaceholderCall
 
     }
 
+    // Renders only when custom view is received
     private fun renderCustomData(data: WECampaignData) {
         val propertyReceived = data.targetViewId + "customViewer"
         val container = findViewById<LinearLayout>(R.id.dynamicScreenLayout)
@@ -364,16 +376,19 @@ class DynamicScreen : AppCompatActivity(), WECampaignCallback, WEPlaceholderCall
         val customTextView = customView.findViewWithTag<TextView>(propertyReceived)
         customTextView?.text = data.toString()
 
+        // Tracks custom impression
         impressionButton.setOnClickListener {
             Logger.d(Constants.TAG, "Listener increased in onData")
             data.trackImpression(null)
         }
+        // Tracks custom click
         clickButton.setOnClickListener {
             Logger.d(Constants.TAG, "Click increased in onData")
             data.trackClick(null)
         }
     }
 
+    // Exception Error!
     private fun renderError(campaignId: String?, targetViewId: String, errorString: String) {
         val propertyReceived = targetViewId + "customViewer"
         val container = findViewById<LinearLayout>(R.id.dynamicScreenLayout)
@@ -386,7 +401,6 @@ class DynamicScreen : AppCompatActivity(), WECampaignCallback, WEPlaceholderCall
 
         val customTextView = customView.findViewWithTag<TextView>(propertyReceived)
         customTextView?.text = "Exception for $targetViewId \n campaignId - $campaignId  \n  Exception - $errorString"
-
         customTextView.setTextSize(TypedValue.COMPLEX_UNIT_PX, 60.toFloat())
 
         impressionButton.setOnClickListener {
@@ -412,6 +426,4 @@ class DynamicScreen : AppCompatActivity(), WECampaignCallback, WEPlaceholderCall
     override fun onRendered(data: WECampaignData) {
         Logger.d(Constants.TAG, "onRendered inside: " + data.targetViewId)
     }
-
-
 }

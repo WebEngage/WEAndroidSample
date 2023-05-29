@@ -1,7 +1,7 @@
 package com.webengage.sample.inline.model
 
 
-data class Model (
+data class ScreenModel (
     var listSize: Int? = 0,
     val screenName: String = "",
     val eventName: String = "",

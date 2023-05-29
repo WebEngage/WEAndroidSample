@@ -12,12 +12,13 @@ import android.widget.TextView
 import com.webengage.sample.R
 import com.webengage.sample.Utils.Utils
 import com.webengage.sample.inline.model.DataModel
-import com.webengage.sample.inline.model.Model
+import com.webengage.sample.inline.model.ScreenModel
 import com.webengage.sdk.android.WebEngage
 
+// inline1inline1: List of screen/Add screen details button
 class ListScreenActivity : AppCompatActivity() {
     private lateinit var addScreenButton: Button
-    val dataModel = DataModel.getInstance()
+    private val dataModel = DataModel.getInstance()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -26,6 +27,7 @@ class ListScreenActivity : AppCompatActivity() {
         DataModel.getInstance().updateData(arr)
 
         addScreenButton = findViewById<Button>(R.id.addScreen)
+        // Add Screen Details
         addScreenButton.setOnClickListener {
             val intent = Intent(this, ScreenDetails::class.java)
             startActivity(intent)
@@ -38,10 +40,13 @@ class ListScreenActivity : AppCompatActivity() {
         WebEngage.get().analytics().screenNavigated("Custom-screen")
     }
 
+    // creates entry of each  screen list
     private fun createList() {
+        // Remove views if any existing
         val container = findViewById<LinearLayout>(R.id.cusomLinearLayout)
         container.removeAllViews()
-        val list = dataModel.getData()
+
+        val list = dataModel.getScreenData()
         val itemListLayout = LinearLayout(this)
         itemListLayout.orientation = LinearLayout.VERTICAL
         val layoutParams = LinearLayout.LayoutParams(
@@ -52,6 +57,7 @@ class ListScreenActivity : AppCompatActivity() {
         layoutParams.setMargins(0, 50, 0, 50)
         itemListLayout.layoutParams = layoutParams
 
+        // Render each entry in the list
         for (entry in list) {
             val itemLayout = LinearLayout(this)
             itemLayout.orientation = LinearLayout.VERTICAL
@@ -82,7 +88,7 @@ class ListScreenActivity : AppCompatActivity() {
             )
             itemLayout.addView(valueTextView)
 
-            // Add the value TextView
+            // event TextView
             val eventTextView = TextView(this)
             eventTextView.text = "Event Name ${entry.eventName}"
             screenNameTextView.setTextSize(TypedValue.COMPLEX_UNIT_SP, 22f)
@@ -134,7 +140,6 @@ class ListScreenActivity : AppCompatActivity() {
             itemListLayout.addView(itemButtonLayout)
         }
 
-
         // Add the horizontal LinearLayout to the parent layout inside a ScrollView
         val scrollView = ScrollView(this)
         scrollView.layoutParams = LinearLayout.LayoutParams(
@@ -145,7 +150,8 @@ class ListScreenActivity : AppCompatActivity() {
         container.addView(scrollView)
     }
 
-    private fun openScreen(entry: Model) {
+    // navigates to Inline screens
+    private fun openScreen(entry: ScreenModel) {
         if (entry.isRecyclerView) {
             val intent = Intent(this, RecyclerActivity::class.java)
             intent.putExtra("pageData", Utils.convertModelToString(entry))

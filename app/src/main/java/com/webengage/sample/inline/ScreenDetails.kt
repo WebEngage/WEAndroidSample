@@ -11,7 +11,7 @@ import com.webengage.sample.inline.model.DataModel
 
 class ScreenDetails : AppCompatActivity() {
     private val dataModel = DataModel.getInstance()
-    var isCheked: Boolean = false
+    private var isChecked: Boolean = false
 
     private lateinit var sizeEdit: EditText
     private lateinit var screenEdit: EditText
@@ -43,34 +43,42 @@ class ScreenDetails : AppCompatActivity() {
             addViewData()
         }
         checkBox.setOnCheckedChangeListener { _, isChecked ->
-            isCheked = isChecked
+            this.isChecked = isChecked
         }
         saveButton.setOnClickListener {
-            val size = sizeEdit.text.toString().toIntOrNull()
-            val screenName = screenEdit.text.toString()
-            val eventName = eventEdit.text.toString()
-            val idName = idName.text.toString()
-            val idValue = idVal.text.toString().toIntOrNull()
-            val list = dataModel.getData()
-            var isAlreadyExist  = false
-            for(i in list) {
-                if(screenName == i.screenName) {
-                    isAlreadyExist = true
-                }
-            }
-            if(!isAlreadyExist && !screenName.isNullOrEmpty() && size != null) {
-                dataModel.setData(size, screenName, eventName, idName, idValue, isCheked)
-                finish();
-            } else {
-                Toast.makeText(applicationContext, "Enter Valid Data", Toast.LENGTH_LONG).show()
-            }
+            saveData()
         }
     }
 
+    // Save screen data
+    private fun saveData() {
+        val size = sizeEdit.text.toString().toIntOrNull()
+        val screenName = screenEdit.text.toString()
+        val eventName = eventEdit.text.toString()
+        val idName = idName.text.toString()
+        val idValue = idVal.text.toString().toIntOrNull()
+        val list = dataModel.getScreenData()
+        var isAlreadyExist  = false
+        // check if screen already exists
+        for(i in list) {
+            if(screenName == i.screenName) {
+                isAlreadyExist = true
+            }
+        }
+        // Add screen details to the dataModel if screen doesn't exists
+        if(!isAlreadyExist && !screenName.isNullOrEmpty() && size != null) {
+            dataModel.setScreenData(size, screenName, eventName, idName, idValue, isChecked)
+            finish();
+        } else {
+            Toast.makeText(applicationContext, "Enter Valid Data", Toast.LENGTH_LONG).show()
+        }
+    }
+
+    // Opens AlertDialog of screen Property/height/width/position
     private fun addViewData() {
         val dialogView = LayoutInflater.from(this).inflate(R.layout.modal_layout, null)
         val builder = AlertDialog.Builder(this).create()
-        showDailog(dialogView, builder)
+        showDialog(dialogView, builder)
         addViewBtn = dialogView.findViewById(R.id.addWeViewBtn)
         position = dialogView.findViewById(R.id.position)
         height = dialogView.findViewById(R.id.height)
@@ -88,6 +96,7 @@ class ScreenDetails : AppCompatActivity() {
         }
     }
 
+    // register position and property
     private fun registerView() {
         val positionView: Int? = position.text.toString().toIntOrNull()
         val heightView: Int? = height.text.toString().toIntOrNull()
@@ -97,7 +106,7 @@ class ScreenDetails : AppCompatActivity() {
         dataModel.setViewData(positionView, isCustomChecked, heightView, widthView, propertyIdView)
     }
 
-    private fun showDailog (dialogView: View, builder: AlertDialog) {
+    private fun showDialog (dialogView: View, builder: AlertDialog) {
         builder.setView(dialogView)
         builder.setTitle("Add View Data")
         builder.show()

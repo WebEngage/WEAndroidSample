@@ -9,7 +9,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.webengage.sample.R
 import com.webengage.sample.Utils.Constants
 import com.webengage.sample.Utils.Utils
-import com.webengage.sample.inline.model.Model
+import com.webengage.sample.inline.model.ScreenModel
 import com.webengage.sample.inline.model.ViewModel
 import com.webengage.personalization.WEInlineView
 import com.webengage.personalization.WEPersonalization
@@ -23,17 +23,20 @@ class ViewModelViewHolder(itemView: View, context: Context) : RecyclerView.ViewH
     private val viewModelContext = context
     private lateinit var inlineView: WEInlineView
     private val weInlineViewList: ArrayList<String> = ArrayList()
-    val container = itemView.findViewById<LinearLayout>(R.id.recyclerItemLayout)
+    val container: LinearLayout = itemView.findViewById<LinearLayout>(R.id.recyclerItemLayout)
     private var viewRegistry: ArrayList<ViewModel> = ArrayList<ViewModel>()
     private var customString: String = "Nothing done yet"
     private val customStringData = mutableListOf<Map<String, String>>()
-    fun bind(viewModel: Model, position: Int) {
+
+    // Renders UI for the RecyclerView - ViewHolder
+    fun bind(viewScreenModel: ScreenModel, position: Int) {
         val mainLayout = LinearLayout(viewModelContext)
         mainLayout.orientation = LinearLayout.VERTICAL
         mainLayout.layoutParams = LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT)
         mainLayout.tag = "viewItemList"
-        viewRegistry = viewModel.viewRegistry
+        viewRegistry = viewScreenModel.viewRegistry
         var isInlineViewFound = false
+        // renders screen layouts (custom/Non-custom)
         for(entry in viewRegistry) {
             Logger.d(Constants.TAG, "entry in holder $entry")
             if(entry.isCustomView) {
@@ -47,8 +50,9 @@ class ViewModelViewHolder(itemView: View, context: Context) : RecyclerView.ViewH
             }
         }
         Logger.d(Constants.TAG, "customStringData - $customStringData")
+
         if(!isInlineViewFound) {
-            addTextView(viewModel.listSize, mainLayout)
+            addDefaultTextView(viewScreenModel.listSize, mainLayout)
         }
         container.addView(mainLayout)
 
@@ -264,7 +268,8 @@ class ViewModelViewHolder(itemView: View, context: Context) : RecyclerView.ViewH
         Logger.d(Constants.TAG, "onRendered inside: " + data.targetViewId)
     }
 
-    private fun addTextView(position: Int?, mainLayout: LinearLayout) {
+    // Display Default Text incase of non-inline view
+    private fun addDefaultTextView(position: Int?, mainLayout: LinearLayout) {
         val textView = TextView(viewModelContext)
         textView.text = "List -> ${position}"
         textView.setTextSize(TypedValue.COMPLEX_UNIT_SP, 22f)
@@ -279,6 +284,7 @@ class ViewModelViewHolder(itemView: View, context: Context) : RecyclerView.ViewH
         mainLayout.addView(textView)
     }
 
+    // return true  for customInline View Position else false
     private fun checkIfCustomInlineViewPosition(propertyReceived: String): Boolean {
         if (!viewRegistry.isNullOrEmpty()) {
             for ((index, i) in viewRegistry.withIndex()) {

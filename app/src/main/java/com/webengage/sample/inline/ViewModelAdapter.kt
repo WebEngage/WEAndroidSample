@@ -4,9 +4,9 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.webengage.sample.R
-import com.webengage.sample.inline.model.Model
+import com.webengage.sample.inline.model.ScreenModel
 
-class ViewModelAdapter(private val viewModelList: List<Model>) :
+class ViewModelAdapter(private val viewScreenModelList: List<ScreenModel>) :
     RecyclerView.Adapter<ViewModelViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewModelViewHolder {
@@ -25,13 +25,12 @@ class ViewModelAdapter(private val viewModelList: List<Model>) :
         holder.container.removeAllViews()
     }
 
-
     override fun onBindViewHolder(holder: ViewModelViewHolder, position: Int) {
-        val viewModel = viewModelList[position]
+        val viewModel = viewScreenModelList[position]
         holder.bind(viewModel, position)
     }
 
     override fun getItemCount(): Int {
-        return viewModelList.size
+        return viewScreenModelList.size
     }
 }

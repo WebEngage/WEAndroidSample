@@ -15,32 +15,34 @@ import com.webengage.sample.R
 import com.webengage.sample.Utils.Constants
 import com.webengage.sample.Utils.Utils
 import com.webengage.sample.inline.model.DataModel
-import com.webengage.sample.inline.model.Model
+import com.webengage.sample.inline.model.ScreenModel
 import com.webengage.sample.inline.model.ViewModel
 import com.webengage.sdk.android.Logger
 import com.webengage.sdk.android.WebEngage
 
+// Opens when screen is marked with recyclerView checkbox
 class RecyclerActivity : AppCompatActivity() {
-    private lateinit var modelData: Model
-    private var viewModelList = ArrayList<Model>()
+    private lateinit var screenModelData: ScreenModel
+    private var viewScreenModelList = ArrayList<ScreenModel>()
     private var listSize: Int = 0
     private var screenName: String = ""
     var eventName: String = ""
     var viewRegistry: ArrayList<ViewModel> = ArrayList<ViewModel>()
     private val dataModel = DataModel.getInstance()
     private lateinit var trackEventText: TextView
-    private lateinit var trackRandom: Button
+    private lateinit var trackEvent: Button
     private lateinit var navigationButton: Button
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_recycler)
         val recyclerView = findViewById<RecyclerView>(R.id.recyclerView)
+        // screenData of particular screen passed to render screen
         val ss: String = intent.getStringExtra("pageData").toString()
-        modelData = Utils.convertStringToModel(ss)
-        listSize = modelData?.listSize!!
-        screenName = modelData.screenName
-        eventName = modelData.eventName
-        viewRegistry = modelData.viewRegistry
+        screenModelData = Utils.convertStringToModel(ss)
+        listSize = screenModelData?.listSize!!
+        screenName = screenModelData.screenName
+        eventName = screenModelData.eventName
+        viewRegistry = screenModelData.viewRegistry
         WebEngage.get().analytics().screenNavigated(screenName)
         if (!eventName.isNullOrEmpty()) {
             WebEngage.get().analytics().track(eventName)
@@ -48,39 +50,39 @@ class RecyclerActivity : AppCompatActivity() {
 
         navigationButton = findViewById(R.id.navigation)
         trackEventText = findViewById<EditText>(R.id.trackRecyclerText)
-        trackRandom = findViewById<Button>(R.id.trackRecyclerButton)
+        trackEvent = findViewById<Button>(R.id.trackRecyclerButton)
 
         navigationButton.setOnClickListener {
             turnOnModal()
         }
 
-        trackRandom.setOnClickListener {
+        // Tracks Event
+        trackEvent.setOnClickListener {
             val eventToTrack = trackEventText.text.toString()
             Logger.d(Constants.TAG, "tracking event - $eventToTrack")
             WebEngage.get().analytics().track(eventToTrack)
+            WebEngage.get().analytics().track(eventToTrack)
         }
 
-        Logger.d(Constants.TAG, "Recycler: intent data " + modelData)
-
-
+        // Renders views based on the size provided
         for (i in 0 until listSize) {
-
-            var newModelData = Model(
+            var newScreenModelData = ScreenModel(
                 i,
-                modelData.screenName,
-                modelData.eventName,
-                modelData.idName,
-                modelData.idValue,
-                modelData.isRecyclerView,
-                modelData.viewRegistry
+                screenModelData.screenName,
+                screenModelData.eventName,
+                screenModelData.idName,
+                screenModelData.idValue,
+                screenModelData.isRecyclerView,
+                screenModelData.viewRegistry
             )
-            viewModelList.add(newModelData)
+            viewScreenModelList.add(newScreenModelData)
         }
-        val adapter = ViewModelAdapter(viewModelList)
+        val adapter = ViewModelAdapter(viewScreenModelList)
         recyclerView.adapter = adapter
         recyclerView.layoutManager = LinearLayoutManager(this)
     }
 
+    // Modal with list of screens where user can naviagte to
     private fun turnOnModal() {
         val dialogView = LayoutInflater.from(this).inflate(R.layout.modal_navigation, null)
         val builder = AlertDialog.Builder(this).create()
@@ -99,11 +101,12 @@ class RecyclerActivity : AppCompatActivity() {
         }
     }
 
+    // Navigation to screen by passing screen details
     private fun navigateToScreen(screenName: String, builder: AlertDialog) {
-        val list = dataModel.getData()
+        val list = dataModel.getScreenData()
         var isScreenFound = false
         for (entry in list) {
-            if (entry.screenName.equals(screenName)) {
+            if (entry.screenName == screenName) {
                 if (entry.isRecyclerView) {
                     val intent = Intent(this, RecyclerActivity::class.java)
                     intent.putExtra("pageData", Utils.convertModelToString(entry))

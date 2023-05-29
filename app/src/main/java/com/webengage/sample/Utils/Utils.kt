@@ -1,7 +1,7 @@
 package com.webengage.sample.Utils
 
 import com.webengage.sample.MainApplication
-import com.webengage.sample.inline.model.Model
+import com.webengage.sample.inline.model.ScreenModel
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 
@@ -15,43 +15,41 @@ class Utils {
 
         }
 
-        fun storeModelData(latestList: ArrayList<Model>) {
+        fun storeModelData(latestList: ArrayList<ScreenModel>) {
             val gson = Gson()
             val jsonString = gson.toJson(latestList)
             prefs.put("registry", jsonString)
         }
 
-        fun getModelData(): ArrayList<Model> {
+        fun getModelData(): ArrayList<ScreenModel> {
             val jsonString = prefs.getString("registry", null)
             val gson = Gson()
-            var modelList: ArrayList<Model> = arrayListOf()
+            var screenModelList: ArrayList<ScreenModel> = arrayListOf()
             if (!jsonString.isNullOrEmpty()) {
-                modelList =
-                    gson.fromJson(jsonString, object : TypeToken<ArrayList<Model>>() {}.type)
+                screenModelList =
+                    gson.fromJson(jsonString, object : TypeToken<ArrayList<ScreenModel>>() {}.type)
             }
-            return modelList
+            return screenModelList
         }
 
-        fun convertModelToString(modelData: Model): String? {
+        fun convertModelToString(screenModelData: ScreenModel): String? {
             val gson = Gson()
-            val jsonString = gson.toJson(modelData)
-            return jsonString
+            return gson.toJson(screenModelData)
         }
 
-        fun convertStringToModel(jsonString: String): Model {
+        fun convertStringToModel(jsonString: String): ScreenModel {
             val gson = Gson()
-            var modelData: Model =
-                Model(0, "Screen Name", "Event Name", "", null, false, ArrayList())
+            var screenModelData: ScreenModel =
+                ScreenModel(0, "Screen Name", "Event Name", "", null, false, ArrayList())
             if (!jsonString.isNullOrEmpty()) {
-                modelData = gson.fromJson(jsonString, Model::class.java)
+                screenModelData = gson.fromJson(jsonString, ScreenModel::class.java)
             }
-            return modelData
+            return screenModelData
         }
 
         fun validateUserName(username: String): Boolean {
-            return !username.isEmpty()
+            return username.isNotEmpty()
         }
-
 
         fun checkIsUserLoggedIn(): Boolean {
             return SharedPrefsManager.get().getString(Constants.CUID, "").isNotEmpty()
