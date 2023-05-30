@@ -34,6 +34,15 @@ class MainActivity : AppCompatActivity() {
         updateUserText()
     }
 
+    override fun onResume() {
+        super.onResume()
+        screenNavigate()
+    }
+
+    private fun screenNavigate(){
+        WebEngage.get().analytics().screenNavigated("Home")
+    }
+
     private fun initValues() {
         cuid = prefs.getString(Constants.CUID, "")
     }
@@ -50,7 +59,7 @@ class MainActivity : AppCompatActivity() {
 
 
         mUserProfileButton = findViewById(R.id.profile_button)
-        mUserProfileButton.setOnClickListener{
+        mUserProfileButton.setOnClickListener {
             startActivity(Utils.getUserActivityIntent(this))
         }
     }
@@ -96,48 +105,73 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun showLoginDialog() {
-            val dialogView = LayoutInflater.from(this).inflate(R.layout.dialog_login, null)
-            val builder = AlertDialog.Builder(this)
-            builder.setView(dialogView)
-            builder.setCancelable(true)
-                .setPositiveButton(
-                    "LOGIN"
-                ) { dialog, id ->
-                    // Do nothing here
-                }
-                .setNegativeButton(
-                    "CANCEL"
-                ) { dialog, id ->
-                    // Do nothing here
-                }
-            val alertDialog = builder.create()
-            alertDialog.show()
-            alertDialog.getButton(-1).setOnClickListener(View.OnClickListener {
-                val passwordEditText =
-                    dialogView.findViewById<View>(R.id.passwordEditText) as EditText
-                val username =
-                    (dialogView.findViewById<View>(R.id.usernameEditText) as EditText).text.toString()
-                        .trim { it <= ' ' }
-                if (Utils.validateUserName(username)) {
+        val dialogView = LayoutInflater.from(this).inflate(R.layout.dialog_login, null)
+        val builder = AlertDialog.Builder(this)
+        builder.setView(dialogView)
+        builder.setCancelable(true)
+            .setPositiveButton(
+                "LOGIN"
+            ) { dialog, id ->
+                // Do nothing here
+            }
+            .setNegativeButton(
+                "CANCEL"
+            ) { dialog, id ->
+                // Do nothing here
+            }
+        val alertDialog = builder.create()
+        alertDialog.show()
+        alertDialog.getButton(-1).setOnClickListener(View.OnClickListener {
+            val jwt =
+                (dialogView.findViewById<View>(R.id.jwtTokenEditText) as EditText).text.toString()
+                    .trim()
+            val username =
+                (dialogView.findViewById<View>(R.id.usernameEditText) as EditText).text.toString()
+                    .trim { it <= ' ' }
+            if (Utils.validateUserName(username)) {
+                if (Utils.validateJWT(jwt))
+                    login(username, jwt)
+                else
                     login(username)
-                    alertDialog.dismiss()
-                    return@OnClickListener
-                }
-            })
-        }
+                alertDialog.dismiss()
+                return@OnClickListener
+            }
+        })
+    }
 
 
     private fun login(username: String) {
-        WebEngage.get().user().login(username)
         prefs.put(Constants.CUID, username)
         cuid = username
         mLoginMenuItem.isVisible = false
         mLogoutMenuItem.isVisible = true
         updateUserText()
+        loginToWebEngage(username)
+    }
+
+    private fun loginToWebEngage(username: String) {
+        WebEngage.get().user().login(username)
+    }
+
+    private fun loginToWebEngage(username: String, jwt: String) {
+        WebEngage.get().user().login(username, jwt)
+    }
+
+    private fun login(username: String, jwt: String) {
+        prefs.put(Constants.CUID, username)
+        prefs.put(Constants.JWT, jwt)
+        cuid = username
+        mLoginMenuItem.isVisible = false
+        mLogoutMenuItem.isVisible = true
+        updateUserText()
+        loginToWebEngage(username, jwt)
+    }
+
+    private fun logoutFromWebEngage(){
+        WebEngage.get().user().logout()
     }
 
     private fun logout() {
-        WebEngage.get().user().logout()
         prefs.put(
             Constants.PREV_LOGIN,
             prefs.getString(Constants.CUID, "")
@@ -156,11 +190,13 @@ class MainActivity : AppCompatActivity() {
             Constants.PUSH_OPTIN,
             Constants.INAPP_OPTIN,
             Constants.SMS_OPTIN,
-            Constants.EMAIL_OPTIN
+            Constants.EMAIL_OPTIN,
+            Constants.WHATSAPP_OPTIN
         )
         mLoginMenuItem.isVisible = true
         mLogoutMenuItem.isVisible = false
         updateUserText()
+        logoutFromWebEngage()
     }
 
 

@@ -38,32 +38,32 @@
                 android:text="@string/profile_button" />
 
             <Button
+                android:id="@+id/personalizationButton"
+                style="@style/ButtonStyle"
+                android:text="@string/inline_personalization_button" />
+
+            <!--todo-->
+            <Button
                 android:id="@+id/eventsButton"
                 style="@style/ButtonStyle"
                 android:layout_marginBottom="@dimen/margin_large"
-                android:text="@string/events_button" />
+                android:text="@string/events_button"
+                android:visibility="gone"/>
 
+            <!--todo-->
             <Button
                 android:id="@+id/screenButton"
                 style="@style/ButtonStyle"
                 android:layout_marginBottom="@dimen/margin_large"
-                android:text="SCREENS" />
+                android:text="@string/screen_button"
+                android:visibility="gone"/>
 
+            <!--todo-->
             <Button
-                android:id="@+id/pushButton"
+                android:id="@+id/notificationInboxButton"
                 style="@style/ButtonStyle"
-                android:text="@string/push_button" />
-
-            <Button
-                android:id="@+id/inAppButton"
-                style="@style/ButtonStyle"
-                android:text="@string/in_app_button" />
-
-
-            <Button
-                android:id="@+id/personalizationButton"
-                style="@style/ButtonStyle"
-                android:text="Inline Personalization" />
+                android:text="@string/notification_inbox_button"
+                android:visibility="gone"/>
 
 
         </LinearLayout>

@@ -44,6 +44,15 @@ class UserActivity : Activity() {
         initViews()
     }
 
+    override fun onResume() {
+        super.onResume()
+        screenNavigate()
+    }
+
+    private fun screenNavigate(){
+        WebEngage.get().analytics().screenNavigated("UserProfile")
+    }
+
     fun initViews() {
 
         mFirstNameEditText = findViewById(R.id.firstNameEditTextInputLayout)

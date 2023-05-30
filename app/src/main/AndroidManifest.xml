@@ -28,8 +28,9 @@
         android:theme="@style/Theme.WebEngagesample"
         tools:targetApi="31">
 
-        <service android:exported="false"
-            android:name=".MyFirebaseMessagingService">
+        <!--Register FCM Service-->
+        <service android:exported="true"
+            android:name=".push.MyFirebaseMessagingService">
             <intent-filter>
                 <action android:name="com.google.firebase.MESSAGING_EVENT"/>
             </intent-filter>
@@ -57,6 +58,7 @@
         <activity
             android:name="com.webengage.sample.inline.ListScreenActivity" />
 
+        <!--Set WebEngage Environment-->
         <meta-data
             android:name="com.webengage.sdk.android.environment"
             android:value="us" />

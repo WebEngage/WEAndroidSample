@@ -3,9 +3,9 @@ package com.webengage.sample
 import android.app.Application
 import android.content.Context
 import android.util.Log
-import com.google.firebase.messaging.FirebaseMessaging
 import com.webengage.personalization.WEPersonalization
 import com.webengage.sample.Utils.Constants
+import com.webengage.sample.push.Utils
 import com.webengage.sdk.android.WebEngage
 import com.webengage.sdk.android.WebEngageActivityLifeCycleCallbacks
 import com.webengage.sdk.android.WebEngageConfig
@@ -14,7 +14,6 @@ import com.webengage.sdk.android.actions.render.InAppNotificationData
 import com.webengage.sdk.android.actions.render.PushNotificationData
 import com.webengage.sdk.android.callbacks.InAppNotificationCallbacks
 import com.webengage.sdk.android.callbacks.PushNotificationCallbacks
-import com.webengage.sdk.android.callbacks.StateChangeCallbacks
 import com.webengage.sdk.android.callbacks.WESecurityCallback
 
 
@@ -54,6 +53,9 @@ class MainApplication : Application(), PushNotificationCallbacks, InAppNotificat
 
         //Register Push Notification callbacks
         WebEngage.registerPushNotificationCallback(this)
+
+        //Register FCM token
+        Utils().registerFCMToken()
     }
 
 

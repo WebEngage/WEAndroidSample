@@ -7,6 +7,7 @@ object Constants {
     const val TAG = "WebEngage-Sample-App"
 
     const val CUID = "username"
+    const val JWT = "jwt"
     const val PREV_LOGIN = "prev_login"
     const val FIRST_NAME = "firstname"
     const val LAST_NAME = "lastname"

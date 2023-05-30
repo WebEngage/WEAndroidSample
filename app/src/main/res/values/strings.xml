@@ -7,7 +7,7 @@
     <!-- Hints -->
     <string name="license_hint">License Code</string>
     <string name="username_hint">user id</string>
-    <string name="password_hint">password</string>
+    <string name="jwt_hint">JWT Token</string>
     <string name="first_name">First Name</string>
     <string name="last_name">Last Name</string>
     <string name="email">Email</string>
@@ -36,13 +36,12 @@
     <string name="profile_button">User Profile</string>
     <string name="events_button">EVENTS</string>
     <string name="complex_events_button">COMPLEX EVENTS</string>
-    <string name="push_button">PUSH</string>
     <string name="in_app_button">IN-APP</string>
     <string name="survey_button">SURVEY</string>
     <string name="bridge_button">BRIDGE</string>
-    <string name="command_button">COMMAND</string>
-    <string name="config_button">CONFIG</string>
-    <string name="edit_profile">Edit Profile</string>
+    <string name="notification_inbox_button">Notification Inbox</string>
+    <string name="inline_personalization_button">Inline Personalization</string>
+    <string name="screen_button">SCREENS</string>
     <string name="add_attribute">Add Custom Attribute</string>
     <string name="delete_attribute">Delete Custom Attribute</string>
     <string name="add_custom_geofence">Add Custom Geofence</string>

@@ -59,6 +59,9 @@ class Utils {
             return username.isNotEmpty()
         }
 
+        fun validateJWT(jwt: String): Boolean{
+            return jwt.isNotEmpty()
+        }
         fun checkIsUserLoggedIn(): Boolean {
             return SharedPrefsManager.get().getString(Constants.CUID, "").isNotEmpty()
         }

@@ -16,10 +16,10 @@
         android:imeOptions="actionNext" />
 
     <EditText
-        android:id="@+id/passwordEditText"
+        android:id="@+id/jwtTokenEditText"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="@string/password_hint"
+        android:hint="@string/jwt_hint"
         android:textSize="@dimen/edittext_text_size"
         android:maxLines="1"
         android:maxLength="20"
