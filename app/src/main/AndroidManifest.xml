@@ -3,6 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     package="com.webengage.sample">
 
+    <!--For Android 10 and up : Declare package visibility-->
     <queries>
         <package android:name="com.google.android.youtube" />
 
@@ -17,6 +18,9 @@
         </intent>
     </queries>
 
+    <!--For Android 13 : Declare permission for showing notifications-->
+    <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
+
     <application
         android:name="com.webengage.sample.MainApplication"
         android:allowBackup="false"
@@ -26,7 +30,7 @@
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/Theme.WebEngagesample"
-        tools:targetApi="31">
+        tools:targetApi="33">
 
         <!--Register FCM Service-->
         <service android:exported="true"

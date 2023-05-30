@@ -1,7 +1,10 @@
 package com.webengage.sample
 
+import android.content.pm.PackageManager
+import android.os.Build
 import android.os.Bundle
 import android.os.PersistableBundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.Menu
 import android.view.MenuItem
@@ -14,6 +17,7 @@ import androidx.appcompat.app.AppCompatActivity
 import com.webengage.sample.Utils.Constants
 import com.webengage.sample.Utils.SharedPrefsManager
 import com.webengage.sample.Utils.Utils
+import com.webengage.sample.push.Utils.Companion.PUSH_NOTIFICATIONS
 import com.webengage.sdk.android.WebEngage
 
 
@@ -34,12 +38,56 @@ class MainActivity : AppCompatActivity() {
         updateUserText()
     }
 
+    override fun onStart() {
+        super.onStart()
+        requestPermission()
+    }
+
+    fun requestPermission() {
+        //For App's targeting below 33
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            if (Build.VERSION.SDK_INT >= 33) {
+                Log.d(
+                    Constants.TAG,
+                    "onResume: checking for PUSH_NOTIFICATIONS: " + (checkSelfPermission(
+                        PUSH_NOTIFICATIONS
+                    ) == PackageManager.PERMISSION_GRANTED)
+                )
+                if (checkSelfPermission(PUSH_NOTIFICATIONS) != PackageManager.PERMISSION_GRANTED) {
+                    requestPermissions(
+                        arrayOf<String>(PUSH_NOTIFICATIONS),
+                        102
+                    )
+                    com.webengage.sample.push.Utils().setDevicePushOptIn(false)
+                } else {
+                    com.webengage.sample.push.Utils().setDevicePushOptIn(true)
+                }
+            }
+        }
+    }
+
+    override fun onRequestPermissionsResult(
+        requestCode: Int,
+        permissions: Array<String?>,
+        grantResults: IntArray
+    ) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+        Log.d(
+            Constants.TAG,
+            "onRequestPermissionsResult permissions: $permissions grantResults: $grantResults"
+        )
+        if (checkSelfPermission(PUSH_NOTIFICATIONS) == PackageManager.PERMISSION_GRANTED) {
+            com.webengage.sample.push.Utils().setDevicePushOptIn(true)
+        }
+    }
+
+
     override fun onResume() {
         super.onResume()
         screenNavigate()
     }
 
-    private fun screenNavigate(){
+    private fun screenNavigate() {
         WebEngage.get().analytics().screenNavigated("Home")
     }
 
@@ -167,7 +215,7 @@ class MainActivity : AppCompatActivity() {
         loginToWebEngage(username, jwt)
     }
 
-    private fun logoutFromWebEngage(){
+    private fun logoutFromWebEngage() {
         WebEngage.get().user().logout()
     }
 
