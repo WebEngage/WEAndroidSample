@@ -21,5 +21,6 @@ object Constants {
     const val INAPP_OPTIN = "inapp_optin"
     const val SMS_OPTIN = "sms_optin"
     const val EMAIL_OPTIN = "email_optin"
+    const val WHATSAPP_OPTIN = "whatsapp_optin"
 
 }

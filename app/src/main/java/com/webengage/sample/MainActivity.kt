@@ -166,9 +166,9 @@ class MainActivity : AppCompatActivity() {
 
     private fun updateUserText() {
         if (Utils.checkIsUserLoggedIn()) {
-            mUsernameTextView.setText("Hi!! " + this.cuid)
+            mUsernameTextView.text = "Hi ${this.cuid} !"
         } else {
-            mUsernameTextView.setText("Hiiii")
+            mUsernameTextView.text = "Hi"
         }
     }
 }

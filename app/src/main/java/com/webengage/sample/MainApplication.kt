@@ -33,7 +33,7 @@ class MainApplication : Application(), PushNotificationCallbacks, InAppNotificat
 
         //Create WebEngage Config
         val webEngageConfig = WebEngageConfig.Builder()
-            .setWebEngageKey("aa131d2c")// 311c5274 //47b66161
+            .setWebEngageKey("aa131d2c")
             .setDebugMode(true) // only in development mode
             .setEventReportingStrategy(ReportingStrategy.FORCE_SYNC)
             .build()
