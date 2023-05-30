@@ -81,7 +81,6 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-
     override fun onResume() {
         super.onResume()
         screenNavigate()

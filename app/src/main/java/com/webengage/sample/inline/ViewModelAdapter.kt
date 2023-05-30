@@ -16,6 +16,7 @@ class ViewModelAdapter(private val viewScreenModelList: List<ScreenModel>) :
     }
 
     override fun getItemId(position: Int) = position.toLong()
+
     override fun getItemViewType(position: Int): Int {
         return position
     }

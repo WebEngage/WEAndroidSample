@@ -32,26 +32,30 @@ class ViewModelViewHolder(itemView: View, context: Context) : RecyclerView.ViewH
     fun bind(viewScreenModel: ScreenModel, position: Int) {
         val mainLayout = LinearLayout(viewModelContext)
         mainLayout.orientation = LinearLayout.VERTICAL
-        mainLayout.layoutParams = LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT)
+        mainLayout.layoutParams = LinearLayout.LayoutParams(
+            LinearLayout.LayoutParams.MATCH_PARENT,
+            LinearLayout.LayoutParams.MATCH_PARENT
+        )
         mainLayout.tag = "viewItemList"
         viewRegistry = viewScreenModel.viewRegistry
         var isInlineViewFound = false
         // renders screen layouts (custom/Non-custom)
-        for(entry in viewRegistry) {
+        for (entry in viewRegistry) {
             Logger.d(Constants.TAG, "entry in holder $entry")
-            if(entry.isCustomView) {
-                addCustomTextView(entry,mainLayout)
-                WEPersonalization.Companion.get().registerWEPlaceholderCallback(entry.propertyId, this)
+            if (entry.isCustomView) {
+                addCustomTextView(entry, mainLayout)
+                WEPersonalization.Companion.get()
+                    .registerWEPlaceholderCallback(entry.propertyId, this)
             } else {
                 if (entry.position == position) {
                     isInlineViewFound = true
-                        addWEInlineView(entry, position, mainLayout)
+                    addWEInlineView(entry, position, mainLayout)
                 }
             }
         }
         Logger.d(Constants.TAG, "customStringData - $customStringData")
 
-        if(!isInlineViewFound) {
+        if (!isInlineViewFound) {
             addDefaultTextView(viewScreenModel.listSize, mainLayout)
         }
         container.addView(mainLayout)
@@ -174,38 +178,38 @@ class ViewModelViewHolder(itemView: View, context: Context) : RecyclerView.ViewH
         val isCustomProperty = checkIfCustomInlineViewPosition(propertyReceived)
         Logger.d(Constants.TAG, "isCustomProperty:  $isCustomProperty \n +for $propertyReceived")
 
-        if(isCustomProperty) {
+        if (isCustomProperty) {
             renderCustomData(data)
         }
     }
 
     fun renderButtons(itemListLayout: LinearLayout, data: WECampaignData) {
-            val layoutParams = LinearLayout.LayoutParams(
-                LinearLayout.LayoutParams.WRAP_CONTENT,
-                LinearLayout.LayoutParams.WRAP_CONTENT
-            )
+        val layoutParams = LinearLayout.LayoutParams(
+            LinearLayout.LayoutParams.WRAP_CONTENT,
+            LinearLayout.LayoutParams.WRAP_CONTENT
+        )
 
-            val impressionButton = Button(viewModelContext)
-            impressionButton.text = "Impression"
-            impressionButton.tag = "impressionTag"
-            impressionButton.layoutParams = layoutParams
+        val impressionButton = Button(viewModelContext)
+        impressionButton.text = "Impression"
+        impressionButton.tag = "impressionTag"
+        impressionButton.layoutParams = layoutParams
 
-            val clickButton = Button(viewModelContext)
-            clickButton.text = "Click"
-            clickButton.tag = "clickTag"
-            clickButton.layoutParams = layoutParams
+        val clickButton = Button(viewModelContext)
+        clickButton.text = "Click"
+        clickButton.tag = "clickTag"
+        clickButton.layoutParams = layoutParams
 
-            val linearButtonLayout = LinearLayout(viewModelContext)
-            linearButtonLayout.addView(impressionButton)
-            linearButtonLayout.addView(clickButton)
-            itemListLayout.addView(linearButtonLayout)
+        val linearButtonLayout = LinearLayout(viewModelContext)
+        linearButtonLayout.addView(impressionButton)
+        linearButtonLayout.addView(clickButton)
+        itemListLayout.addView(linearButtonLayout)
 
-            impressionButton.setOnClickListener {
-                data.trackImpression(null)
-            }
-            clickButton.setOnClickListener {
-                data.trackClick(null)
-            }
+        impressionButton.setOnClickListener {
+            data.trackImpression(null)
+        }
+        clickButton.setOnClickListener {
+            data.trackClick(null)
+        }
 
     }
 
@@ -234,23 +238,32 @@ class ViewModelViewHolder(itemView: View, context: Context) : RecyclerView.ViewH
 
     private fun renderError(campaignId: String?, targetViewId: String, errorString: String) {
         val propertyReceived = targetViewId + "customViewer"
-        val containerLayout =  container.findViewById<LinearLayout>(R.id.recyclerItemLayout)
+        val containerLayout = container.findViewById<LinearLayout>(R.id.recyclerItemLayout)
         Logger.d(Constants.TAG, "Exception occured - $propertyReceived")
 
         val impressionButton = containerLayout.findViewWithTag<Button>("impressionTag")
         val clickButton = containerLayout.findViewWithTag<Button>("clickTag")
 
         val customTextView = containerLayout.findViewWithTag<TextView>(propertyReceived)
-        customString = "Exception for $targetViewId \n campaignId - $campaignId  \n  Exception - $errorString"
+        customString =
+            "Exception for $targetViewId \n campaignId - $campaignId  \n  Exception - $errorString"
         customTextView?.text = customString
         customTextView.setTextSize(TypedValue.COMPLEX_UNIT_PX, 50.toFloat())
 
         impressionButton.setOnClickListener {
-            Toast.makeText(viewModelContext, "Not Valid when exception occuerd ", Toast.LENGTH_SHORT)
+            Toast.makeText(
+                viewModelContext,
+                "Not Valid when exception occuerd ",
+                Toast.LENGTH_SHORT
+            )
                 .show()
         }
         clickButton.setOnClickListener {
-            Toast.makeText(viewModelContext, "Not Valid when exception occuerd ", Toast.LENGTH_SHORT)
+            Toast.makeText(
+                viewModelContext,
+                "Not Valid when exception occuerd ",
+                Toast.LENGTH_SHORT
+            )
                 .show()
         }
     }
@@ -279,7 +292,7 @@ class ViewModelViewHolder(itemView: View, context: Context) : RecyclerView.ViewH
             Utils.covertDpToPixel(100),
             1f
         )
-        layoutParams.setMargins(0,50,0,50)
+        layoutParams.setMargins(0, 50, 0, 50)
         textView.layoutParams = layoutParams
         mainLayout.addView(textView)
     }
@@ -289,7 +302,7 @@ class ViewModelViewHolder(itemView: View, context: Context) : RecyclerView.ViewH
         if (!viewRegistry.isNullOrEmpty()) {
             for ((index, i) in viewRegistry.withIndex()) {
                 val currentEntry = viewRegistry[index]
-                if(currentEntry.propertyId == propertyReceived && currentEntry.isCustomView) {
+                if (currentEntry.propertyId == propertyReceived && currentEntry.isCustomView) {
                     return true
                 }
             }

@@ -58,15 +58,15 @@ class ScreenDetails : AppCompatActivity() {
         val idName = idName.text.toString()
         val idValue = idVal.text.toString().toIntOrNull()
         val list = dataModel.getScreenData()
-        var isAlreadyExist  = false
+        var isAlreadyExist = false
         // check if screen already exists
-        for(i in list) {
-            if(screenName == i.screenName) {
+        for (i in list) {
+            if (screenName == i.screenName) {
                 isAlreadyExist = true
             }
         }
         // Add screen details to the dataModel if screen doesn't exists
-        if(!isAlreadyExist && !screenName.isNullOrEmpty() && size != null) {
+        if (!isAlreadyExist && !screenName.isNullOrEmpty() && size != null) {
             dataModel.setScreenData(size, screenName, eventName, idName, idValue, isChecked)
             finish();
         } else {
@@ -88,7 +88,7 @@ class ScreenDetails : AppCompatActivity() {
 
         addViewBtn.setOnClickListener {
             Toast.makeText(this, "View Added", Toast.LENGTH_SHORT).show()
-            if(!propertyId.text.toString().isNullOrEmpty()) {
+            if (!propertyId.text.toString().isNullOrEmpty()) {
                 registerView()
                 createList()
             }
@@ -106,11 +106,12 @@ class ScreenDetails : AppCompatActivity() {
         dataModel.setViewData(positionView, isCustomChecked, heightView, widthView, propertyIdView)
     }
 
-    private fun showDialog (dialogView: View, builder: AlertDialog) {
+    private fun showDialog(dialogView: View, builder: AlertDialog) {
         builder.setView(dialogView)
         builder.setTitle("Add View Data")
         builder.show()
     }
+
     override fun onResume() {
         super.onResume()
         createList()
@@ -124,34 +125,52 @@ class ScreenDetails : AppCompatActivity() {
         val itemListLayout = LinearLayout(this)
         itemListLayout.orientation = LinearLayout.VERTICAL
         itemListLayout.setBackgroundResource(androidx.cardview.R.color.cardview_shadow_end_color)
-        itemListLayout.layoutParams = LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT)
+        itemListLayout.layoutParams = LinearLayout.LayoutParams(
+            LinearLayout.LayoutParams.MATCH_PARENT,
+            LinearLayout.LayoutParams.MATCH_PARENT
+        )
 
         for (i in list) {
             val itemLayout = LinearLayout(this)
             itemLayout.orientation = LinearLayout.VERTICAL
-            itemLayout.layoutParams = LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT)
+            itemLayout.layoutParams = LinearLayout.LayoutParams(
+                LinearLayout.LayoutParams.MATCH_PARENT,
+                LinearLayout.LayoutParams.WRAP_CONTENT
+            )
 
             // Add the screen name TextView
             val screenNameTextView = TextView(this)
             screenNameTextView.text = "PropertyId ${i.propertyId}"
-            screenNameTextView.layoutParams = LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT)
+            screenNameTextView.layoutParams = LinearLayout.LayoutParams(
+                LinearLayout.LayoutParams.WRAP_CONTENT,
+                LinearLayout.LayoutParams.WRAP_CONTENT
+            )
             itemLayout.addView(screenNameTextView)
 
             // Add the value TextView
             val valueTextView = TextView(this)
             valueTextView.text = "position ${i.position}"
-            valueTextView.layoutParams = LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT)
+            valueTextView.layoutParams = LinearLayout.LayoutParams(
+                LinearLayout.LayoutParams.WRAP_CONTENT,
+                LinearLayout.LayoutParams.WRAP_CONTENT
+            )
             itemLayout.addView(valueTextView)
 
             // Add the value TextView
             val eventTextView = TextView(this)
             eventTextView.text = "Hieght= ${i.height} | Width= ${i.width}"
-            eventTextView.layoutParams = LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT)
+            eventTextView.layoutParams = LinearLayout.LayoutParams(
+                LinearLayout.LayoutParams.WRAP_CONTENT,
+                LinearLayout.LayoutParams.WRAP_CONTENT
+            )
             itemLayout.addView(eventTextView)
 
 
             val itemButtonLayout = LinearLayout(this)
-            itemButtonLayout.layoutParams = LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT)
+            itemButtonLayout.layoutParams = LinearLayout.LayoutParams(
+                LinearLayout.LayoutParams.MATCH_PARENT,
+                LinearLayout.LayoutParams.WRAP_CONTENT
+            )
 
             // Add the edit button
             val deleteButton = Button(this)
@@ -173,10 +192,14 @@ class ScreenDetails : AppCompatActivity() {
 
         // Add the horizontal LinearLayout to the parent layout inside a ScrollView
         val scrollView = ScrollView(this)
-        scrollView.layoutParams = LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT)
+        scrollView.layoutParams = LinearLayout.LayoutParams(
+            LinearLayout.LayoutParams.MATCH_PARENT,
+            LinearLayout.LayoutParams.WRAP_CONTENT
+        )
         scrollView.addView(itemListLayout)
         container.addView(scrollView)
     }
+
     private fun deleteViewEntry(propertyId: String) {
         dataModel.removeViewEntry(propertyId)
         createList()

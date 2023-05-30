@@ -59,9 +59,10 @@ class Utils {
             return username.isNotEmpty()
         }
 
-        fun validateJWT(jwt: String): Boolean{
+        fun validateJWT(jwt: String): Boolean {
             return jwt.isNotEmpty()
         }
+
         fun checkIsUserLoggedIn(): Boolean {
             return SharedPrefsManager.get().getString(Constants.CUID, "").isNotEmpty()
         }
@@ -78,11 +79,11 @@ class Utils {
             return true
         }
 
-        fun getUserActivityIntent(context: Context):Intent{
+        fun getUserActivityIntent(context: Context): Intent {
             return Intent(context, UserActivity::class.java)
         }
 
-        fun getInlineActivityIntent(context: Context): Intent{
+        fun getInlineActivityIntent(context: Context): Intent {
             return Intent(context, ListScreenActivity::class.java)
         }
     }

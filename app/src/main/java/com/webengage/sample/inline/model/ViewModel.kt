@@ -1,6 +1,6 @@
 package com.webengage.sample.inline.model
 
-data class ViewModel (
+data class ViewModel(
     val position: Int? = 0,
     val isCustomView: Boolean = false,
     val height: Int? = 0,

@@ -12,7 +12,6 @@ class DataModel {
     private var screenName: String = ""
     private var eventName: String = ""
     private var isRecyclerView: Boolean = false
-
     private var viewPosition: Int? = 0
     private var viewHeight: Int? = 0
     private var viewWidth: Int? = 0
@@ -30,19 +29,35 @@ class DataModel {
             }
         }
     }
+
     fun getScreenData(): ArrayList<ScreenModel> {
         return registryMap
     }
 
     // listSize, screenName, eventData, typeOf screen is identified here
-    fun setScreenData(size: Int?, screen: String, event: String, idName: String, idValue: Int?, isChecked: Boolean) {
+    fun setScreenData(
+        size: Int?,
+        screen: String,
+        event: String,
+        idName: String,
+        idValue: Int?,
+        isChecked: Boolean
+    ) {
         listSize = size
         screenName = screen
         eventName = event
         isRecyclerView = isChecked
         val newViewRegistry = ArrayList<ViewModel>()
 
-        val screenModel = ScreenModel(listSize, screenName, eventName, idName, idValue, isRecyclerView, viewRegistry)
+        val screenModel = ScreenModel(
+            listSize,
+            screenName,
+            eventName,
+            idName,
+            idValue,
+            isRecyclerView,
+            viewRegistry
+        )
         registryMap.add(screenModel)
 
         Utils.storeModelData(registryMap)
@@ -54,22 +69,28 @@ class DataModel {
     fun removeScreenEntry(screenName: String) {
         var indexToRemove: Int = -1
         //  removeEntry
-        for ((index,entry) in registryMap.withIndex()) {
-            if(entry.screenName == screenName) {
+        for ((index, entry) in registryMap.withIndex()) {
+            if (entry.screenName == screenName) {
                 Logger.d(Constants.TAG, "Removing index from - $index")
                 indexToRemove = index
             }
         }
         if (indexToRemove != -1) {
             registryMap.removeAt(indexToRemove)
-            Utils.storeModelData(registryMap, )
+            Utils.storeModelData(registryMap)
         }
     }
 
     // Holds data of the view(position,height, width and propertyId)
-    fun setViewData(position: Int?, isCustomView: Boolean, height: Int?, width: Int?, propertyId: String) {
+    fun setViewData(
+        position: Int?,
+        isCustomView: Boolean,
+        height: Int?,
+        width: Int?,
+        propertyId: String
+    ) {
         viewPosition = position
-        viewHeight= height
+        viewHeight = height
         viewWidth = width
         viewPropertyId = propertyId
         val viewModel = ViewModel(viewPosition, isCustomView, viewHeight, viewWidth, viewPropertyId)
@@ -91,8 +112,8 @@ class DataModel {
     fun removeViewEntry(propertyId: String) {
         var indexToRemove: Int = -1
         // removeEntry
-        for ((index,entry) in viewRegistry.withIndex()) {
-            if(entry.propertyId.equals(propertyId)) {
+        for ((index, entry) in viewRegistry.withIndex()) {
+            if (entry.propertyId.equals(propertyId)) {
                 Logger.d(Constants.TAG, "Removing index from - $index")
                 indexToRemove = index
             }

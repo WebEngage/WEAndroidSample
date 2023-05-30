@@ -10,7 +10,7 @@ import com.webengage.sdk.android.WebEngage
 
 class Utils {
 
-    companion object{
+    companion object {
         val PUSH_NOTIFICATIONS = "android.permission.POST_NOTIFICATIONS"
     }
 

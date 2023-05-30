@@ -23,7 +23,7 @@ import com.webengage.personalization.data.WECampaignData
 import com.webengage.sdk.android.Logger
 import com.webengage.sdk.android.WebEngage
 
-class DynamicScreen : AppCompatActivity(), WECampaignCallback, WEPlaceholderCallback  {
+class DynamicScreen : AppCompatActivity(), WECampaignCallback, WEPlaceholderCallback {
     private lateinit var screenModelData: ScreenModel
     private var listSize: Int = 0
     private var screenName: String = ""
@@ -46,13 +46,14 @@ class DynamicScreen : AppCompatActivity(), WECampaignCallback, WEPlaceholderCall
     // Handling DeepLink
     private fun checkAndNavigateDeepLink(param: String?, deepLink: String, hostName: String) {
         var isScreenFound = false
-        if(hostName == "www.youtube.com") {
+        if (hostName == "www.youtube.com") {
             val intent = Intent(Intent.ACTION_VIEW, Uri.parse(deepLink))
             intent.setPackage("com.google.android.youtube")
             startActivity(intent)
         } else {
             val list = dataModel.getScreenData()
-            var screenData: ScreenModel = ScreenModel(0, "", "", "",null, false, ArrayList<ViewModel>())
+            var screenData: ScreenModel =
+                ScreenModel(0, "", "", "", null, false, ArrayList<ViewModel>())
             for (entry in list) {
                 if (entry.screenName == param) {
                     screenData = entry
@@ -66,7 +67,11 @@ class DynamicScreen : AppCompatActivity(), WECampaignCallback, WEPlaceholderCall
                 intent.putExtra("pageData", Utils.convertModelToString(screenData))
                 startActivity(intent)
             } else {
-                Toast.makeText(applicationContext, "Sorry! This Link is not handled by user/ Invalid ScreenName to navigate", Toast.LENGTH_SHORT)
+                Toast.makeText(
+                    applicationContext,
+                    "Sorry! This Link is not handled by user/ Invalid ScreenName to navigate",
+                    Toast.LENGTH_SHORT
+                )
                     .show()
             }
         }
@@ -78,18 +83,18 @@ class DynamicScreen : AppCompatActivity(), WECampaignCallback, WEPlaceholderCall
         WEPersonalization.Companion.get().registerWECampaignCallback(this);
 
         val uri = intent.data
-        if(uri != null) {
+        if (uri != null) {
             val parameters = uri!!.pathSegments
             val param = parameters[parameters.size - 1]
             Logger.d(Constants.TAG, " Params - $param");
         }
         // Gets screen data to render
         val ss = intent.getStringExtra("pageData")
-        if(!ss.isNullOrEmpty()) {
+        if (!ss.isNullOrEmpty()) {
             screenModelData = Utils.convertStringToModel(ss)
         }
         Logger.d(Constants.TAG, "intent data $screenModelData")
-        if(screenModelData != null) {
+        if (screenModelData != null) {
             listSize = screenModelData?.listSize!!
             screenName = screenModelData.screenName
             eventName = screenModelData.eventName
@@ -112,21 +117,21 @@ class DynamicScreen : AppCompatActivity(), WECampaignCallback, WEPlaceholderCall
 
             // Handle DeepLink auto/Manual
             autoClickHandle.setOnCheckedChangeListener { buttonView, isChecked ->
-                if(isChecked != isClickHandledByUser) {
+                if (isChecked != isClickHandledByUser) {
                     isClickHandledByUser = isChecked
                 }
             }
         }
 
-        if(!screenModelData.idName.isNullOrEmpty() && screenModelData.idValue != null && count == 0) {
+        if (!screenModelData.idName.isNullOrEmpty() && screenModelData.idValue != null && count == 0) {
             val screenData: MutableMap<String, Any> = HashMap()
             screenData[screenModelData.idName] = screenModelData.idValue!!
             count += 1
-            WebEngage.get().analytics().screenNavigated(screenName,screenData )
+            WebEngage.get().analytics().screenNavigated(screenName, screenData)
         } else {
             WebEngage.get().analytics().screenNavigated(screenName)
         }
-        if(!eventName.isNullOrEmpty()) {
+        if (!eventName.isNullOrEmpty()) {
             WebEngage.get().analytics().track(eventName)
         }
         attachScreen()
@@ -146,7 +151,10 @@ class DynamicScreen : AppCompatActivity(), WECampaignCallback, WEPlaceholderCall
         itemListLayout.tag = "viewItemList"
         itemListLayout.orientation = LinearLayout.VERTICAL
         itemListLayout.layoutParams =
-            LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT)
+            LinearLayout.LayoutParams(
+                LinearLayout.LayoutParams.MATCH_PARENT,
+                LinearLayout.LayoutParams.MATCH_PARENT
+            )
 
         val weInlineViewList: ArrayList<String> = ArrayList()
 
@@ -178,41 +186,42 @@ class DynamicScreen : AppCompatActivity(), WECampaignCallback, WEPlaceholderCall
                     itemListLayout.addView(customScreenView)
                     addButtonsView(itemListLayout)
                     Logger.d(Constants.TAG, "Register WEPlaceHolder for $propertyId")
-                    WEPersonalization.Companion.get().registerWEPlaceholderCallback(propertyId, this)
+                    WEPersonalization.Companion.get()
+                        .registerWEPlaceholderCallback(propertyId, this)
 
                 } else {
                     val height: Int = viewRegistryData.height!!
-                val width: Int = viewRegistryData.width!!
-                inlineView = WEInlineView(this, propertyId)
-                weInlineViewList.add(propertyId)
-                if (height != 0) {
-                    layoutHeight = Utils.covertDpToPixel(height)
+                    val width: Int = viewRegistryData.width!!
+                    inlineView = WEInlineView(this, propertyId)
+                    weInlineViewList.add(propertyId)
+                    if (height != 0) {
+                        layoutHeight = Utils.covertDpToPixel(height)
+                    }
+                    if (width != 0) {
+                        layoutWidth = Utils.covertDpToPixel(width)
+                        Logger.d(
+                            Constants.TAG,
+                            "layoutWidth- $layoutWidth | PID $propertyId"
+                        )
+                    }
+                    val params =
+                        LinearLayout.LayoutParams(layoutWidth, layoutHeight)
+                    inlineView.layoutParams = params
+                    itemListLayout.addView(inlineView)
                 }
-                if (width != 0) {
-                    layoutWidth = Utils.covertDpToPixel(width)
-                    Logger.d(
-                        Constants.TAG,
-                        "layoutWidth- $layoutWidth | PID $propertyId"
-                    )
-                }
-                val params =
-                    LinearLayout.LayoutParams(layoutWidth, layoutHeight)
-                inlineView.layoutParams = params
-                itemListLayout.addView(inlineView)
-            }
             }
 
         }
-            val scrollViewLayout = ScrollView(this)
+        val scrollViewLayout = ScrollView(this)
         scrollViewLayout.tag = "scrollTag"
 
-            scrollViewLayout.layoutParams = LinearLayout.LayoutParams(
-                LinearLayout.LayoutParams.MATCH_PARENT,
-                LinearLayout.LayoutParams.MATCH_PARENT
-            )
+        scrollViewLayout.layoutParams = LinearLayout.LayoutParams(
+            LinearLayout.LayoutParams.MATCH_PARENT,
+            LinearLayout.LayoutParams.MATCH_PARENT
+        )
 
-            scrollViewLayout.addView(itemListLayout)
-            container.addView(scrollViewLayout)
+        scrollViewLayout.addView(itemListLayout)
+        container.addView(scrollViewLayout)
 
         // loads all the available inline properties available in the list of the screen
         for (propertyId in weInlineViewList) {
@@ -278,7 +287,7 @@ class DynamicScreen : AppCompatActivity(), WECampaignCallback, WEPlaceholderCall
         var isScreenFound = false
         for (entry in list) {
             if (entry.screenName == screenName) {
-                if(entry.isRecyclerView) {
+                if (entry.isRecyclerView) {
                     val intent = Intent(this, RecyclerActivity::class.java)
                     intent.putExtra("pageData", Utils.convertModelToString(entry))
                     startActivity(intent)
@@ -291,8 +300,8 @@ class DynamicScreen : AppCompatActivity(), WECampaignCallback, WEPlaceholderCall
                 builder.dismiss()
             }
         }
-        if(!isScreenFound) {
-            Toast.makeText(this,"Screen Not Found Enter valid screen", Toast.LENGTH_SHORT).show()
+        if (!isScreenFound) {
+            Toast.makeText(this, "Screen Not Found Enter valid screen", Toast.LENGTH_SHORT).show()
         }
     }
 
@@ -313,7 +322,7 @@ class DynamicScreen : AppCompatActivity(), WECampaignCallback, WEPlaceholderCall
         if (!viewRegistry.isNullOrEmpty()) {
             for ((index, i) in viewRegistry.withIndex()) {
                 val currentEntry = viewRegistry[index]
-                if(currentEntry.propertyId == propertyReceived && currentEntry.isCustomView) {
+                if (currentEntry.propertyId == propertyReceived && currentEntry.isCustomView) {
                     return true
                 }
             }
@@ -322,13 +331,20 @@ class DynamicScreen : AppCompatActivity(), WECampaignCallback, WEPlaceholderCall
     }
 
     override fun onCampaignPrepared(data: WECampaignData): WECampaignData? {
-        Logger.d(Constants.TAG, "onCampaignPrepared called for "+data.targetViewId)
+        Logger.d(Constants.TAG, "onCampaignPrepared called for " + data.targetViewId)
         return data
     }
 
-    override fun onCampaignClicked(actionId: String, deepLink: String, data: WECampaignData): Boolean {
-        Logger.d(Constants.TAG, "onCampaignClicked called for "+data.targetViewId + " DL - "+deepLink)
-        if(isClickHandledByUser) {
+    override fun onCampaignClicked(
+        actionId: String,
+        deepLink: String,
+        data: WECampaignData
+    ): Boolean {
+        Logger.d(
+            Constants.TAG,
+            "onCampaignClicked called for " + data.targetViewId + " DL - " + deepLink
+        )
+        if (isClickHandledByUser) {
             val deepLinkData = deepLink.split("/")
             val screenName =
                 if (deepLinkData.size > 3 && deepLinkData[2].equals("www.webengage.com")) {
@@ -344,7 +360,7 @@ class DynamicScreen : AppCompatActivity(), WECampaignCallback, WEPlaceholderCall
     }
 
     override fun onCampaignShown(data: WECampaignData) {
-        Logger.d(Constants.TAG, "onCampaignShown called for "+data.targetViewId)
+        Logger.d(Constants.TAG, "onCampaignShown called for " + data.targetViewId)
     }
 
     override fun onCampaignException(campaignId: String?, targetViewId: String, error: Exception) {
@@ -355,7 +371,7 @@ class DynamicScreen : AppCompatActivity(), WECampaignCallback, WEPlaceholderCall
         val propertyReceived = data.targetViewId
         Logger.d(Constants.TAG, "onDataReceived: " + data.targetViewId)
         val isCustomProperty = checkIfCustomInlineViewPosition(propertyReceived)
-        if(isCustomProperty) {
+        if (isCustomProperty) {
             Logger.d(Constants.TAG, "onCustomDataReceived: for $propertyReceived \n +data")
             renderCustomData(data)
         }
@@ -400,15 +416,24 @@ class DynamicScreen : AppCompatActivity(), WECampaignCallback, WEPlaceholderCall
         val clickButton = scrollContainer.findViewWithTag<Button>("clickTag")
 
         val customTextView = customView.findViewWithTag<TextView>(propertyReceived)
-        customTextView?.text = "Exception for $targetViewId \n campaignId - $campaignId  \n  Exception - $errorString"
+        customTextView?.text =
+            "Exception for $targetViewId \n campaignId - $campaignId  \n  Exception - $errorString"
         customTextView.setTextSize(TypedValue.COMPLEX_UNIT_PX, 60.toFloat())
 
         impressionButton.setOnClickListener {
-            Toast.makeText(applicationContext, "Not Valid when exception occuerd ", Toast.LENGTH_SHORT)
+            Toast.makeText(
+                applicationContext,
+                "Not Valid when exception occuerd ",
+                Toast.LENGTH_SHORT
+            )
                 .show()
         }
         clickButton.setOnClickListener {
-            Toast.makeText(applicationContext, "Not Valid when exception occuerd ", Toast.LENGTH_SHORT)
+            Toast.makeText(
+                applicationContext,
+                "Not Valid when exception occuerd ",
+                Toast.LENGTH_SHORT
+            )
                 .show()
         }
     }
