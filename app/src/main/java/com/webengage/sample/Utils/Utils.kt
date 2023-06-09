@@ -5,6 +5,7 @@ import android.content.Intent
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import com.webengage.sample.MainApplication
+import com.webengage.sample.event.EventActivity
 import com.webengage.sample.inline.ListScreenActivity
 import com.webengage.sample.inline.model.ScreenModel
 import com.webengage.sample.user.UserActivity
@@ -86,5 +87,10 @@ class Utils {
         fun getInlineActivityIntent(context: Context): Intent {
             return Intent(context, ListScreenActivity::class.java)
         }
+
+        fun getEventActivityIntent(context: Context): Intent {
+            return Intent(context, EventActivity::class.java)
+        }
+
     }
 }

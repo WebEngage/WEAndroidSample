@@ -47,8 +47,7 @@
                 android:id="@+id/eventsButton"
                 style="@style/ButtonStyle"
                 android:layout_marginBottom="@dimen/margin_large"
-                android:text="@string/events_button"
-                android:visibility="gone"/>
+                android:text="@string/events_button"/>
 
             <!--todo-->
             <Button

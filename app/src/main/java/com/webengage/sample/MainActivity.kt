@@ -27,6 +27,8 @@ class MainActivity : AppCompatActivity() {
     private lateinit var mLoginMenuItem: MenuItem
     private lateinit var mLogoutMenuItem: MenuItem
     private lateinit var mUsernameTextView: TextView
+    private lateinit var mEventsButton: Button
+
     val prefs: SharedPrefsManager = SharedPrefsManager.get()
     var cuid = ""
 
@@ -108,6 +110,11 @@ class MainActivity : AppCompatActivity() {
         mUserProfileButton = findViewById(R.id.profile_button)
         mUserProfileButton.setOnClickListener {
             startActivity(Utils.getUserActivityIntent(this))
+        }
+
+        mEventsButton = findViewById(R.id.eventsButton)
+        mEventsButton.setOnClickListener{
+            startActivity(Utils.getEventActivityIntent(this))
         }
     }
 
