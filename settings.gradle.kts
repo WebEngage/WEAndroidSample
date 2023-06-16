@@ -1,3 +1,5 @@
+include(":app")
+rootProject.name = "WESampleApp"
 pluginManagement {
     repositories {
         google()
@@ -5,12 +7,13 @@ pluginManagement {
         gradlePluginPortal()
     }
 }
+
+@Suppress("UnstableApiUsage")
 dependencyResolutionManagement {
-    repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)
+    repositoriesMode.set(RepositoriesMode.PREFER_SETTINGS)
     repositories {
         google()
         mavenCentral()
+        gradlePluginPortal()
     }
 }
-rootProject.name = "WESampleApp"
-include ':app'
