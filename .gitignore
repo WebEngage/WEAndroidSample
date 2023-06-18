@@ -17,3 +17,4 @@ local.properties
 /we-personalization
 /buildSrc/build
 /app/google-services.json
+/.idea
