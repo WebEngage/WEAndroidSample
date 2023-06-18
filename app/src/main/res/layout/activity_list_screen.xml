@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context="com.webengage.sample.inline.ListScreenActivity">
+
+    <Button
+        android:id="@+id/addScreen"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Add Screen"
+        android:layout_marginEnd="@dimen/cardview_compat_inset_shadow"
+        />
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/cusomLinearLayout"
+        android:background="@color/cardview_shadow_end_color"
+        android:orientation="horizontal" />
+</LinearLayout>
