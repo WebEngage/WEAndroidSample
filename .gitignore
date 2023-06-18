@@ -18,3 +18,4 @@ local.properties
 /we-personalization
 /buildSrc/.gradle
 /buildSrc/build
+/app/google-services.json
