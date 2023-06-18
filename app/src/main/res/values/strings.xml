@@ -1,0 +1,96 @@
+<resources>
+    <string name="default_app_name">WebEngage Test</string>
+
+    <!-- Texts -->
+    <string name="anonymous_user">anonymous</string>
+
+    <!-- Hints -->
+    <string name="license_hint">License Code</string>
+    <string name="username_hint">user id</string>
+    <string name="jwt_hint">JWT Token</string>
+    <string name="first_name">First Name</string>
+    <string name="last_name">Last Name</string>
+    <string name="email">Email</string>
+    <string name="hashed_email">Hashed Email</string>
+    <string name="phone">Phone</string>
+    <string name="hashed_phone">Hashed Phone</string>
+    <string name="company">Company</string>
+    <string name="birth_date">Birth Date</string>
+    <string name="app_name">WESampleApp</string>
+    <string name="date_format">YYYY-MM-DD</string>
+    <string name="gender">Gender</string>
+    <string name="priority">Priority</string>
+    <string name="key">Key</string>
+    <string name="value">Value</string>
+    <string name="event">Event</string>
+    <string name="screen">Screen</string>
+    <string name="geofence_name">Geofence Name</string>
+
+    <!-- Buttons -->
+    <string name="engage_button">ENGAGE</string>
+    <string name="save_button">SAVE</string>
+    <string name="login_button">LOGIN</string>
+    <string name="skip_engage">Skip Engage</string>
+    <string name="skip_login">Skip Login</string>
+    <string name="logout_button">LOGOUT</string>
+    <string name="profile_button">User Profile</string>
+    <string name="events_button">EVENTS</string>
+    <string name="complex_events_button">COMPLEX EVENTS</string>
+    <string name="in_app_button">IN-APP</string>
+    <string name="survey_button">SURVEY</string>
+    <string name="bridge_button">BRIDGE</string>
+    <string name="notification_inbox_button">Notification Inbox</string>
+    <string name="inline_personalization_button">Inline Personalization</string>
+    <string name="screen_button">SCREENS</string>
+    <string name="add_attribute">Add Custom Attribute</string>
+    <string name="delete_attribute">Delete Custom Attribute</string>
+    <string name="add_custom_geofence">Add Custom Geofence</string>
+    <string name="webengage_options">WebEngage Options</string>
+    <string name="add_button">ADD</string>
+    <string name="remove_button">REMOVE</string>
+    <string name="start_button">START</string>
+    <string name="save">SAVE</string>
+    <string name="track">TRACK</string>
+    <string name="buy">BUY</string>
+    <string name="update">UPDATE</string>
+
+    <!-- status -->
+    <string name="loading">Loading %1$s</string>
+
+    <!-- Errors -->
+    <string name="login_error">Invalid username or password</string>
+    <string name="key_value_error">Invalid key or value</string>
+    <string name="geofence_detail_error">Invalid geofence details</string>
+    <string name="event_error">Invalid event or attributes</string>
+    <string name="no_license_code">No License Code</string>
+    <string name="error_loading">Error loading %1$s</string>
+    <string name="not_found">%1$s not found</string>
+
+    <!-- Messages -->
+    <string name="save_success">Profile saved successfully</string>
+    <string name="track_success">Event tracked successfully</string>
+
+    <!-- Geofence -->
+    <string name="geofence_not_available">Geofence service is not available now</string>
+    <string name="geofence_too_many_geofences">Your app has registered too many geofences</string>
+    <string name="geofence_too_many_pending_intents"> You have provided too many PendingIntents to the addGeofences() call </string>
+    <string name="unknown_geofence_error"> Unknown error: the Geofence service is not available now </string>
+    <string name="geofence_transition_invalid_type"> Geofence transition error: invalid transition type %1$d </string>
+    <string name="geofence_transition_entered"> Entered </string>
+    <string name="geofence_transition_exited"> Exited </string>
+    <string name="unknown_geofence_transition"> Unknown Transition </string>
+    <string name="geofence_transition_notification_text"> Click notification to return to app </string>
+    <string name="insufficient_permissions"> Insufficient permissions. </string>
+    <string name="permission_rationale"> Location permission is needed to set Geofences </string>
+    <string name="permission_denied_explanation"> Permission was denied, but is needed set Geofences </string>
+    <string name="settings">Settings</string>
+    <!--<string name="android_html_text"><![CDATA[<p style="text-align:right;" ><span style="color:#990000;" >Test </span> + 2 = Title long line right alligned next line</p>]]></string>-->
+    <string name="android_html_text"><![CDATA[<p style="text-align:center;" ><span style="font-size:14pt;text-decoration:underline;" >center Test <span style="font-size:10pt;" >description</span> long line</span></p><p style="text-align:left;" ><span style="font-size:14pt;text-decoration:underline;" >left&nbsp;allign 😊 smiley</span></p><p style="text-align:right;" ><span style="font-size:14pt;text-decoration:underline;" >next line right&nbsp;</span></p>]]></string>
+    <string name="USER_ATTRIBUTE_DATE_ERROR">Invalid date format for birthdate. Please enter date in yyyy-MM-dd format.</string>
+    <string-array name="mi_region_array">
+        <item>Global</item>
+        <item>Europe</item>
+        <item>Russia</item>
+        <item>India</item>
+    </string-array>
+</resources>
