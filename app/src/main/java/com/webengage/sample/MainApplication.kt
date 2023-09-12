@@ -65,64 +65,64 @@ class MainApplication : Application(), PushNotificationCallbacks, InAppNotificat
 
     //Push Callbacks
     override fun onPushNotificationReceived(
-        p0: Context?,
-        p1: PushNotificationData?
+        context: Context?,
+        pushNotificationData: PushNotificationData?
     ): PushNotificationData {
-        Log.d(Constants.TAG, "onPushNotificationReceived ${p1!!.experimentId}")
+        Log.d(Constants.TAG, "onPushNotificationReceived ${pushNotificationData!!.experimentId}")
 //        modify the data here if necessary and return the modified PushNotificationData object
-        return p1
+        return pushNotificationData
     }
 
-    override fun onPushNotificationShown(p0: Context?, p1: PushNotificationData?) {
-        Log.d(Constants.TAG, "onPushNotificationShown ${p1!!.experimentId}")
+    override fun onPushNotificationShown(context: Context?, pushNotificationData: PushNotificationData?) {
+        Log.d(Constants.TAG, "onPushNotificationShown ${pushNotificationData!!.experimentId}")
     }
 
-    override fun onPushNotificationClicked(p0: Context?, p1: PushNotificationData?): Boolean {
-        Log.d(Constants.TAG, "onPushNotificationClicked ${p1!!.experimentId}")
+    override fun onPushNotificationClicked(context: Context?, pushNotificationData: PushNotificationData?): Boolean {
+        Log.d(Constants.TAG, "onPushNotificationClicked ${pushNotificationData!!.experimentId}")
 //        return true if you are handling the clicks
 //        return false to let WebEngage handle the clicks
         return false
     }
 
-    override fun onPushNotificationDismissed(p0: Context?, p1: PushNotificationData?) {
-        Log.d(Constants.TAG, "onPushNotificationDismissed ${p1!!.experimentId}")
+    override fun onPushNotificationDismissed(context: Context?, pushNotificationData: PushNotificationData?) {
+        Log.d(Constants.TAG, "onPushNotificationDismissed ${pushNotificationData!!.experimentId}")
     }
 
     override fun onPushNotificationActionClicked(
-        p0: Context?,
-        p1: PushNotificationData?,
-        p2: String?
+        context: Context,
+        pushNotificationData: PushNotificationData?,
+        actionID: String?
     ): Boolean {
 //        return true if you are handling the clicks
 //        return false to let WebEngage handle the clicks
 
-        Log.d(Constants.TAG, "onPushNotificationActionClicked ${p1!!.experimentId}")
+        Log.d(Constants.TAG, "onPushNotificationActionClicked ${pushNotificationData!!.experimentId}")
 
-        if (p1.getCallToActionById(p2).action.equals(Constants.COPY_OTP)) {
+        if (pushNotificationData.getCallToActionById(actionID).action.equals(Constants.COPY_OTP)) {
             //Fetch otp from key value pair
-            if (p1.customData.containsKey(Constants.COPY_OTP)) {
-                Utils().copyToClipBoard(context, p1.customData.getString(Constants.COPY_OTP)!!)
+            if (pushNotificationData.customData.containsKey(Constants.COPY_OTP)) {
+                Utils().copyToClipBoard(context, pushNotificationData.customData.getString(Constants.COPY_OTP)!!)
                 return false
             }
         }
 
-        if (p1.getCallToActionById(p2).action.equals(Constants.TRIGGER_EVENT)) {
+        if (pushNotificationData.getCallToActionById(actionID).action.equals(Constants.TRIGGER_EVENT)) {
             //Fetch Event Name and Event Value Map from key value pair
-            if (p1.customData.containsKey(Constants.EVENT_NAME)) {
-                if (p1.customData.containsKey(Constants.EVENT_VALUE)) {
+            if (pushNotificationData.customData.containsKey(Constants.EVENT_NAME)) {
+                if (pushNotificationData.customData.containsKey(Constants.EVENT_VALUE)) {
                     val customMap = com.webengage.sample.Utils.Utils.convertJsonStringToMap(
-                        p1.customData.getString(Constants.EVENT_VALUE)!!
+                        pushNotificationData.customData.getString(Constants.EVENT_VALUE)!!
                     )
                     Utils().triggerEvent(
                         context,
-                        p1.customData.getString(Constants.EVENT_NAME)!!,
+                        pushNotificationData.customData.getString(Constants.EVENT_NAME)!!,
                         customMap
                     )
                     return false
                 } else {
                     Utils().triggerEvent(
                         context,
-                        p1.customData.getString(Constants.EVENT_NAME)!!,
+                        pushNotificationData.customData.getString(Constants.EVENT_NAME)!!,
                         null
                     )
                     return false
@@ -130,14 +130,14 @@ class MainApplication : Application(), PushNotificationCallbacks, InAppNotificat
             }
         }
 
-        if (p1.getCallToActionById(p2).action.equals(Constants.UPDATE_USER_ATTRIBUTE)) {
+        if (pushNotificationData.getCallToActionById(actionID).action.equals(Constants.UPDATE_USER_ATTRIBUTE)) {
             //Fetch Attribute name and Value from key value pair
-            if (p1.customData.containsKey(Constants.ATTRIBUTE_NAME)) {
-                if (p1.customData.containsKey(Constants.ATTRIBUTE_VALUE)) {
-                    val attributeValue = p1.customData.getString(Constants.ATTRIBUTE_VALUE)
+            if (pushNotificationData.customData.containsKey(Constants.ATTRIBUTE_NAME)) {
+                if (pushNotificationData.customData.containsKey(Constants.ATTRIBUTE_VALUE)) {
+                    val attributeValue = pushNotificationData.customData.getString(Constants.ATTRIBUTE_VALUE)
                     Utils().updateUserAttribute(
                         context,
-                        p1.customData.getString(Constants.ATTRIBUTE_NAME)!!,
+                        pushNotificationData.customData.getString(Constants.ATTRIBUTE_NAME)!!,
                         attributeValue
                     )
                     return false
@@ -151,35 +151,35 @@ class MainApplication : Application(), PushNotificationCallbacks, InAppNotificat
 
     //InApp Callbacks
     override fun onInAppNotificationPrepared(
-        p0: Context?,
-        p1: InAppNotificationData?
+        context: Context?,
+        inAppNotificationData: InAppNotificationData?
     ): InAppNotificationData {
-        Log.d(Constants.TAG, "onInAppNotificationPrepared ${p1!!.experimentId}")
+        Log.d(Constants.TAG, "onInAppNotificationPrepared ${inAppNotificationData!!.experimentId}")
         //modify the data here if necessary and return the modified InAppNotificationData object
-        return p1
+        return inAppNotificationData
     }
 
-    override fun onInAppNotificationShown(p0: Context?, p1: InAppNotificationData?) {
-        Log.d(Constants.TAG, "onInAppNotificationShown ${p1!!.experimentId}")
+    override fun onInAppNotificationShown(context: Context?, inAppNotificationData: InAppNotificationData?) {
+        Log.d(Constants.TAG, "onInAppNotificationShown ${inAppNotificationData!!.experimentId}")
     }
 
     override fun onInAppNotificationClicked(
-        p0: Context?,
-        p1: InAppNotificationData?,
-        p2: String?
+        context: Context?,
+        inAppNotificationData: InAppNotificationData?,
+        experimentID: String?
     ): Boolean {
-        Log.d(Constants.TAG, "onInAppNotificationClicked ${p1!!.experimentId}")
+        Log.d(Constants.TAG, "onInAppNotificationClicked ${inAppNotificationData!!.experimentId}")
 //        return true if you are handling the clicks
 //        return false to let WebEngage handle the clicks
         return false
     }
 
-    override fun onInAppNotificationDismissed(p0: Context?, p1: InAppNotificationData?) {
-        Log.d(Constants.TAG, "onInAppNotificationDismissed ${p1!!.experimentId}")
+    override fun onInAppNotificationDismissed(context: Context?, inAppNotificationData: InAppNotificationData?) {
+        Log.d(Constants.TAG, "onInAppNotificationDismissed ${inAppNotificationData!!.experimentId}")
     }
 
     //Security Callbacks
-    override fun onSecurityException(p0: MutableMap<String, Any>?) {
+    override fun onSecurityException(exceptionMap: MutableMap<String, Any>?) {
 //        Set new jwt token here
 //        WebEngage.get().setSecurityToken(CUID, JWT_TOKEN)
     }
