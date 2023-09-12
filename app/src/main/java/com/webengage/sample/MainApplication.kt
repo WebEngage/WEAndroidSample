@@ -4,6 +4,7 @@ import android.app.Application
 import android.content.Context
 import android.util.Log
 import com.webengage.personalization.WEPersonalization
+import com.webengage.pushtemplates.CustomCallback
 import com.webengage.sample.Utils.Constants
 import com.webengage.sample.push.Utils
 import com.webengage.sdk.android.WebEngage
@@ -32,7 +33,7 @@ class MainApplication : Application(), PushNotificationCallbacks, InAppNotificat
 
         //Create WebEngage Config
         val webEngageConfig = WebEngageConfig.Builder()
-            .setWebEngageKey("~2024bb40")
+            .setWebEngageKey("LICENSE_CODE")
             .setDebugMode(true) // only in development mode
             .setEventReportingStrategy(ReportingStrategy.FORCE_SYNC)
             .build()
@@ -53,6 +54,9 @@ class MainApplication : Application(), PushNotificationCallbacks, InAppNotificat
         //Register Push Notification callbacks
         WebEngage.registerPushNotificationCallback(this)
 
+        //Register Push Template Callback
+        WebEngage.registerCustomPushRenderCallback(CustomCallback())
+        WebEngage.registerCustomPushRerenderCallback(CustomCallback())
 
         //Register FCM token
         Utils().registerFCMToken()
