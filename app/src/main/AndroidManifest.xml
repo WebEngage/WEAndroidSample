@@ -60,10 +60,11 @@
         <activity android:name="com.webengage.sample.inline.ScreenDetails" />
         <activity android:name="com.webengage.sample.inline.ListScreenActivity" />
         <activity android:name=".event.EventActivity"/>
+
         <!--Set WebEngage Environment-->
-        <meta-data
-            android:name="com.webengage.sdk.android.environment"
-            android:value="in" />
+<!--        <meta-data-->
+<!--            android:name="com.webengage.sdk.android.environment"-->
+<!--            android:value="aws" />-->
 
         <activity
             android:name="com.webengage.sample.MainActivity"

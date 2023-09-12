@@ -24,4 +24,12 @@ object Constants {
     const val EMAIL_OPTIN = "email_optin"
     const val WHATSAPP_OPTIN = "whatsapp_optin"
 
+    const val UPDATE_USER_ATTRIBUTE = "update-user"
+    const val COPY_OTP = "copy-otp"
+    const val TRIGGER_EVENT = "trigger-event"
+    const val EVENT_NAME = "we_event_name"
+    const val EVENT_VALUE = "we_event_value"
+    const val ATTRIBUTE_NAME = "we_attribute_name"
+    const val ATTRIBUTE_VALUE = "we_attribute_value"
+
 }

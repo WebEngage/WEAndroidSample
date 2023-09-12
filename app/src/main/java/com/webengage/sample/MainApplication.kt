@@ -32,11 +32,10 @@ class MainApplication : Application(), PushNotificationCallbacks, InAppNotificat
 
         //Create WebEngage Config
         val webEngageConfig = WebEngageConfig.Builder()
-            .setWebEngageKey("aa131d2c")
+            .setWebEngageKey("~2024bb40")
             .setDebugMode(true) // only in development mode
             .setEventReportingStrategy(ReportingStrategy.FORCE_SYNC)
             .build()
-
         //Initialize WebEngage Personalization SDK
         WEPersonalization.get().init()
 
@@ -53,6 +52,7 @@ class MainApplication : Application(), PushNotificationCallbacks, InAppNotificat
 
         //Register Push Notification callbacks
         WebEngage.registerPushNotificationCallback(this)
+
 
         //Register FCM token
         Utils().registerFCMToken()
@@ -89,9 +89,58 @@ class MainApplication : Application(), PushNotificationCallbacks, InAppNotificat
         p1: PushNotificationData?,
         p2: String?
     ): Boolean {
-        Log.d(Constants.TAG, "onPushNotificationActionClicked ${p1!!.experimentId}")
 //        return true if you are handling the clicks
 //        return false to let WebEngage handle the clicks
+
+        Log.d(Constants.TAG, "onPushNotificationActionClicked ${p1!!.experimentId}")
+
+        if (p1.getCallToActionById(p2).action.equals(Constants.COPY_OTP)) {
+            //Fetch otp from key value pair
+            if (p1.customData.containsKey(Constants.COPY_OTP)) {
+                Utils().copyToClipBoard(context, p1.customData.getString(Constants.COPY_OTP)!!)
+                return false
+            }
+        }
+
+        if (p1.getCallToActionById(p2).action.equals(Constants.TRIGGER_EVENT)) {
+            //Fetch Event Name and Event Value Map from key value pair
+            if (p1.customData.containsKey(Constants.EVENT_NAME)) {
+                if (p1.customData.containsKey(Constants.EVENT_VALUE)) {
+                    val customMap = com.webengage.sample.Utils.Utils.convertJsonStringToMap(
+                        p1.customData.getString(Constants.EVENT_VALUE)!!
+                    )
+                    Utils().triggerEvent(
+                        context,
+                        p1.customData.getString(Constants.EVENT_NAME)!!,
+                        customMap
+                    )
+                    return false
+                } else {
+                    Utils().triggerEvent(
+                        context,
+                        p1.customData.getString(Constants.EVENT_NAME)!!,
+                        null
+                    )
+                    return false
+                }
+            }
+        }
+
+        if (p1.getCallToActionById(p2).action.equals(Constants.UPDATE_USER_ATTRIBUTE)) {
+            //Fetch Attribute name and Value from key value pair
+            if (p1.customData.containsKey(Constants.ATTRIBUTE_NAME)) {
+                if (p1.customData.containsKey(Constants.ATTRIBUTE_VALUE)) {
+                    val attributeValue = p1.customData.getString(Constants.ATTRIBUTE_VALUE)
+                    Utils().updateUserAttribute(
+                        context,
+                        p1.customData.getString(Constants.ATTRIBUTE_NAME)!!,
+                        attributeValue
+                    )
+                    return false
+                }
+            }
+        }
+
         return false
     }
 
