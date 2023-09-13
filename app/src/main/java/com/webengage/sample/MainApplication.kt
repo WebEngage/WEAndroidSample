@@ -172,7 +172,7 @@ class MainApplication : Application(), PushNotificationCallbacks, InAppNotificat
         ) {
             val durationInMinutes =
                 pushNotificationData.customData.getString(Constants.SNOOZE_TIME)!!.toLong()
-            val durationInMillis = 1000 * 30L * durationInMinutes
+            val durationInMillis = 1000 * 60 * durationInMinutes
             Utils().scheduleAlarm(context, durationInMillis, pushNotificationData, Constants.SNOOZE_TEMPLATE)
             val notificationManager: NotificationManager =
                 context.applicationContext.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
