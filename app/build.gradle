@@ -43,7 +43,7 @@ dependencies {
         exclude group: 'com.webengage', module: 'android-sdk'
     }
 
-    implementation 'com.github.WebEngage:android-push-templates:feature~banner_template-SNAPSHOT'
+    implementation 'com.github.WebEngage:android-push-templates:banner_template_openCallback-SNAPSHOT'
 
     implementation platform('com.google.firebase:firebase-bom:32.1.0')
     implementation 'com.google.firebase:firebase-analytics-ktx'

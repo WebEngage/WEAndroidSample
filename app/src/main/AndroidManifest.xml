@@ -21,6 +21,10 @@
     <!--For Android 13 : Declare permission for showing notifications-->
     <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
 
+    <!--For Android 12 : Declare permission for using exact alarms-->
+    <uses-permission android:name="android.permission.SCHEDULE_EXACT_ALARM" />
+    <uses-permission android:name="android.permission.USE_EXACT_ALARM" />
+
     <application
         android:name="com.webengage.sample.MainApplication"
         android:allowBackup="false"

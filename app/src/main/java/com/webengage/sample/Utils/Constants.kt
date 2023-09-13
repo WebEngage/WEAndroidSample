@@ -31,5 +31,9 @@ object Constants {
     const val EVENT_VALUE = "we_event_value"
     const val ATTRIBUTE_NAME = "we_attribute_name"
     const val ATTRIBUTE_VALUE = "we_attribute_value"
+    const val SNOOZE = "we-snooze"
+    const val SNOOZE_TIME = "we_snooze_time" //Time in minutes
+
+    const val REMOTE_VIEW_MAX_SIZE = 4000000  //Size is in bytes
 
 }

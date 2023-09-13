@@ -1,11 +1,13 @@
 package com.webengage.sample
 
 import android.app.Application
+import android.app.NotificationManager
 import android.content.Context
 import android.util.Log
 import com.webengage.personalization.WEPersonalization
 import com.webengage.pushtemplates.CustomCallback
 import com.webengage.sample.Utils.Constants
+import com.webengage.sample.push.CustomCallbackAlarm
 import com.webengage.sample.push.Utils
 import com.webengage.sdk.android.WebEngage
 import com.webengage.sdk.android.WebEngageActivityLifeCycleCallbacks
@@ -33,7 +35,7 @@ class MainApplication : Application(), PushNotificationCallbacks, InAppNotificat
 
         //Create WebEngage Config
         val webEngageConfig = WebEngageConfig.Builder()
-            .setWebEngageKey("LICENSE_CODE")
+            .setWebEngageKey("~2024bb40")
             .setDebugMode(true) // only in development mode
             .setEventReportingStrategy(ReportingStrategy.FORCE_SYNC)
             .build()
@@ -55,8 +57,8 @@ class MainApplication : Application(), PushNotificationCallbacks, InAppNotificat
         WebEngage.registerPushNotificationCallback(this)
 
         //Register Push Template Callback
-        WebEngage.registerCustomPushRenderCallback(CustomCallback())
-        WebEngage.registerCustomPushRerenderCallback(CustomCallback())
+        WebEngage.registerCustomPushRenderCallback(CustomCallbackAlarm())
+        WebEngage.registerCustomPushRerenderCallback(CustomCallbackAlarm())
 
         //Register FCM token
         Utils().registerFCMToken()
@@ -73,18 +75,27 @@ class MainApplication : Application(), PushNotificationCallbacks, InAppNotificat
         return pushNotificationData
     }
 
-    override fun onPushNotificationShown(context: Context?, pushNotificationData: PushNotificationData?) {
+    override fun onPushNotificationShown(
+        context: Context?,
+        pushNotificationData: PushNotificationData?
+    ) {
         Log.d(Constants.TAG, "onPushNotificationShown ${pushNotificationData!!.experimentId}")
     }
 
-    override fun onPushNotificationClicked(context: Context?, pushNotificationData: PushNotificationData?): Boolean {
+    override fun onPushNotificationClicked(
+        context: Context?,
+        pushNotificationData: PushNotificationData?
+    ): Boolean {
         Log.d(Constants.TAG, "onPushNotificationClicked ${pushNotificationData!!.experimentId}")
 //        return true if you are handling the clicks
 //        return false to let WebEngage handle the clicks
         return false
     }
 
-    override fun onPushNotificationDismissed(context: Context?, pushNotificationData: PushNotificationData?) {
+    override fun onPushNotificationDismissed(
+        context: Context?,
+        pushNotificationData: PushNotificationData?
+    ) {
         Log.d(Constants.TAG, "onPushNotificationDismissed ${pushNotificationData!!.experimentId}")
     }
 
@@ -96,12 +107,18 @@ class MainApplication : Application(), PushNotificationCallbacks, InAppNotificat
 //        return true if you are handling the clicks
 //        return false to let WebEngage handle the clicks
 
-        Log.d(Constants.TAG, "onPushNotificationActionClicked ${pushNotificationData!!.experimentId}")
+        Log.d(
+            Constants.TAG,
+            "onPushNotificationActionClicked ${pushNotificationData!!.experimentId}"
+        )
 
         if (pushNotificationData.getCallToActionById(actionID).action.equals(Constants.COPY_OTP)) {
             //Fetch otp from key value pair
             if (pushNotificationData.customData.containsKey(Constants.COPY_OTP)) {
-                Utils().copyToClipBoard(context, pushNotificationData.customData.getString(Constants.COPY_OTP)!!)
+                Utils().copyToClipBoard(
+                    context,
+                    pushNotificationData.customData.getString(Constants.COPY_OTP)!!
+                )
                 return false
             }
         }
@@ -134,7 +151,8 @@ class MainApplication : Application(), PushNotificationCallbacks, InAppNotificat
             //Fetch Attribute name and Value from key value pair
             if (pushNotificationData.customData.containsKey(Constants.ATTRIBUTE_NAME)) {
                 if (pushNotificationData.customData.containsKey(Constants.ATTRIBUTE_VALUE)) {
-                    val attributeValue = pushNotificationData.customData.getString(Constants.ATTRIBUTE_VALUE)
+                    val attributeValue =
+                        pushNotificationData.customData.getString(Constants.ATTRIBUTE_VALUE)
                     Utils().updateUserAttribute(
                         context,
                         pushNotificationData.customData.getString(Constants.ATTRIBUTE_NAME)!!,
@@ -145,6 +163,18 @@ class MainApplication : Application(), PushNotificationCallbacks, InAppNotificat
             }
         }
 
+        if (pushNotificationData.getCallToActionById(actionID).action.equals(Constants.SNOOZE) &&
+            pushNotificationData.customData.containsKey(Constants.SNOOZE_TIME)
+        ) {
+            val durationInMinutes =
+                pushNotificationData.customData.getString(Constants.SNOOZE_TIME)!!.toLong()
+            val durationInMillis = 1000 * 30L
+            Utils().scheduleAlarm(context, durationInMillis, pushNotificationData, "SNOOZE")
+            val notificationManager: NotificationManager =
+                context.applicationContext.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+            notificationManager.cancel(pushNotificationData.variationId.hashCode())
+            return true
+        }
         return false
     }
 
@@ -159,7 +189,10 @@ class MainApplication : Application(), PushNotificationCallbacks, InAppNotificat
         return inAppNotificationData
     }
 
-    override fun onInAppNotificationShown(context: Context?, inAppNotificationData: InAppNotificationData?) {
+    override fun onInAppNotificationShown(
+        context: Context?,
+        inAppNotificationData: InAppNotificationData?
+    ) {
         Log.d(Constants.TAG, "onInAppNotificationShown ${inAppNotificationData!!.experimentId}")
     }
 
@@ -174,7 +207,10 @@ class MainApplication : Application(), PushNotificationCallbacks, InAppNotificat
         return false
     }
 
-    override fun onInAppNotificationDismissed(context: Context?, inAppNotificationData: InAppNotificationData?) {
+    override fun onInAppNotificationDismissed(
+        context: Context?,
+        inAppNotificationData: InAppNotificationData?
+    ) {
         Log.d(Constants.TAG, "onInAppNotificationDismissed ${inAppNotificationData!!.experimentId}")
     }
 
