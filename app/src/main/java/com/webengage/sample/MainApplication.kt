@@ -164,12 +164,16 @@ class MainApplication : Application(), PushNotificationCallbacks, InAppNotificat
         }
 
         if (pushNotificationData.getCallToActionById(actionID).action.equals(Constants.SNOOZE) &&
-            pushNotificationData.customData.containsKey(Constants.SNOOZE_TIME)
+            pushNotificationData.customData.containsKey(Constants.SNOOZE_TIME) &&
+            pushNotificationData.customData.containsKey(Constants.WE_CUSTOM_RENDER) &&
+            pushNotificationData.customData.getString(Constants.WE_CUSTOM_RENDER).equals("true", true) &&
+            pushNotificationData.customData.containsKey(Constants.TEMPLATE_TYPE) &&
+            pushNotificationData.customData.getString(Constants.TEMPLATE_TYPE).equals(Constants.SNOOZE_TEMPLATE, true)
         ) {
             val durationInMinutes =
                 pushNotificationData.customData.getString(Constants.SNOOZE_TIME)!!.toLong()
-            val durationInMillis = 1000 * 30L
-            Utils().scheduleAlarm(context, durationInMillis, pushNotificationData, "SNOOZE")
+            val durationInMillis = 1000 * 30L * durationInMinutes
+            Utils().scheduleAlarm(context, durationInMillis, pushNotificationData, Constants.SNOOZE_TEMPLATE)
             val notificationManager: NotificationManager =
                 context.applicationContext.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
             notificationManager.cancel(pushNotificationData.variationId.hashCode())

@@ -86,7 +86,7 @@ class Utils {
         val extras = Bundle()
         extras.putString("RENDER_TYPE", renderType)
 
-        val intent = PendingIntentFactory.constructRerenderPendingIntent(context, data, "snooze", extras )
+        val intent = PendingIntentFactory.constructRerenderPendingIntent(context, data, Constants.SNOOZE_TEMPLATE, extras )
 
         val alarmManager =
             context.applicationContext.getSystemService(Context.ALARM_SERVICE) as AlarmManager

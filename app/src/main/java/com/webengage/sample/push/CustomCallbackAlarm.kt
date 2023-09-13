@@ -17,7 +17,7 @@ class CustomCallbackAlarm : CustomCallback() {
         Log.d(Constants.TAG,"Received rerender callback")
         if (extras != null) {
             if (extras.containsKey("RENDER_TYPE") && extras.getString("RENDER_TYPE")
-                    .equals("SNOOZE")
+                    .equals(Constants.SNOOZE_TEMPLATE)
             ) {
                 Log.d(Constants.TAG,"Received snooze rerender callback")
                 CustomPushRenderer().renderPushNotification(context!!, pushNotificationData!!)
@@ -28,9 +28,9 @@ class CustomCallbackAlarm : CustomCallback() {
     }
 
     override fun onRender(context: Context?, pushNotificationData: PushNotificationData?): Boolean {
-        if (pushNotificationData!!.customData.containsKey("template_type") && pushNotificationData.customData.getString(
-                "template_type"
-            )!!.equals("snooze", true)
+        if (pushNotificationData!!.customData.containsKey(Constants.TEMPLATE_TYPE) && pushNotificationData.customData.getString(
+                Constants.TEMPLATE_TYPE
+            )!!.equals(Constants.SNOOZE_TEMPLATE, true)
         ) {
             CustomPushRenderer().renderPushNotification(context!!, pushNotificationData)
             return true

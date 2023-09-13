@@ -33,6 +33,9 @@ object Constants {
     const val ATTRIBUTE_VALUE = "we_attribute_value"
     const val SNOOZE = "we-snooze"
     const val SNOOZE_TIME = "we_snooze_time" //Time in minutes
+    const val WE_CUSTOM_RENDER = "we_custom_render"
+    const val TEMPLATE_TYPE = "template_type"
+    const val SNOOZE_TEMPLATE = "snooze"
 
     const val REMOTE_VIEW_MAX_SIZE = 4000000  //Size is in bytes
 
